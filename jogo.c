@@ -7,67 +7,95 @@ int main()
     Joguinho();
     return 0;
 }
+#define G 400
+#define PJS 350.0f
+#define PHS 200.0f
+typedef struct{
+    Rectangle target;
+    Texture2D textura;
+    float speed;
+}personagem;
 void Joguinho(){
-    int lar = 720, alt = 540;
+    int lar = 720, alt = 540, jump_height = 60;
     InitWindow(lar, alt, "Jogo");
+    personagem persona1;
+    persona1.target.height = 110;
+    persona1.target.width = 110;
     Image imagem = LoadImage("fundo2.png");
     ImageResizeNN(&imagem, lar, alt);
     Image personagem = LoadImage("personagem.png");
     ImageResizeNN(&personagem, 110, 110);
-    Texture2D perso = LoadTextureFromImage(personagem);
+    persona1.textura = LoadTextureFromImage(personagem);
     Texture2D textura = LoadTextureFromImage(imagem);
-    int x = lar/2, y = 430, space = 0, cont = 0;
+    persona1.target.x = lar/2, persona1.target.y = 404;
+    int space = 0;
+    bool Jump = true, hit = true;
     char dir = 'D';
+    InitAudioDevice();
+    Sound som = LoadSound("jump.sfx.rfx");
     while (!WindowShouldClose())
-    {
-        if (space >= 0 && y <= 430)
-        {
-            WaitTime(0.01);
-            space -= 1;
-            y += 1;
-        }
-        if(cont == 1 && space == 0){
-            cont = 0;
+    {   
+        float delta = GetFrameTime();
+        
+        //printf("%d\n", fps);
+        if(Jump == 1 && space == 0){
+            Jump = 0;
         }
         Vector2 mouse = GetMousePosition();
         //printf("%f-%f\n", mouse.x, mouse.y);
         if (IsKeyDown(KEY_RIGHT))
         {
-            x += 1;
+            persona1.target.x += 5;
             if (dir == 'E')
             {
                 dir = 'D';
                 ImageFlipHorizontal(&personagem);
-                perso = LoadTextureFromImage(personagem);
+                persona1.textura = LoadTextureFromImage(personagem);
             }
             
         }
         if (IsKeyDown(KEY_LEFT))
         {
-            x -= 1;
+            persona1.target.x -= 5;
             if (dir == 'D')
             {
                 dir = 'E';
                 ImageFlipHorizontal(&personagem);
-                perso = LoadTextureFromImage(personagem);
+                persona1.textura = LoadTextureFromImage(personagem);
             }
         }
-        if (IsKeyPressed(KEY_SPACE) && cont == 0)
+        if (IsKeyPressed(KEY_D))
         {
-            // for (int i = 1; i <= 40; i++)
-            // {
-            //     WaitTime(0.05);
-            //     DrawTexture(perso, x, y - i, WHITE);
-            // }
-            y -= 40;
-            space = 40;
-            cont = 1;
+            if (dir == 'D')
+            {
+                persona1.target.x += 20;
+            } else {
+                persona1.target.x -= 20;
+            }
+            
         }
-        printf("%d\n", y);
+        if (persona1.target.y >= 404)
+        {
+            hit = true, Jump = true;
+        }
+        if (IsKeyPressed(KEY_SPACE) && Jump == true)
+        { 
+            persona1.speed = -PJS;
+            Jump = false, hit = false;
+        }
+        if (!hit)
+        {
+            persona1.target.y += persona1.speed*delta;
+            persona1.speed += G*delta;
+            Jump = false;
+        }
+        
+        
+        //printf("%f\n", persona1.target.y);
         BeginDrawing();
         DrawTexture(textura, 0, 0, WHITE);
-        DrawTexture(perso, x, y, WHITE);
-        DrawText("Jogo iniciado", 100, 100, 30, RED);
+        DrawTexture(persona1.textura, persona1.target.x, persona1.target.y, WHITE);
+        //DrawText("Jogo iniciado", 100, 100, 30, RED);
         EndDrawing();
     }
 }
