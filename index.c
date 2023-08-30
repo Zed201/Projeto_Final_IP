@@ -1,11 +1,28 @@
 #include <stdio.h>
 #include "raylib.h"
-#include "jogo.c"
+//#include "jogo.c"
 #define posX_Ret 225
 void Manual();
+typedef struct 
+{
+    // Implementar essa struct para as coisas ficarem mais faceis
+    Rectangle frame;
+    char string[100];
+} botao;
+
 int main()
 {
     int lar = 720, alt = 540;
+    Rectangle start, sair, comecar;
+    start.height = 90;
+    start.width = 280;
+    sair.height = 90;
+    sair.width = 280;
+    start.x = 225;
+    start.y = 170;
+    sair.x = 225;
+    sair.y = 350;
+    
     InitWindow(lar, alt, "Testando Menu");
     Image imagem = LoadImage("fundo.png");
     ImageResizeNN(&imagem, lar, alt);
@@ -16,36 +33,39 @@ int main()
         //printf("%f-%f\n", pos.x, pos.y);
         BeginDrawing();
         DrawTexture(textura, 0, 0, WHITE);
-        if (pos.x > posX_Ret && pos.x < 451 && pos.y > 171 && pos.y < 258)
+        if (CheckCollisionPointRec(pos, start))
         {
-            DrawRectangle(posX_Ret, 170, 280, 90, RED);
+            DrawRectangleRec(start, RED);
             DrawText("Start", posX_Ret + 80, 170 + 25, 35, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 Manual();
             }
         } else {
-            DrawRectangle(posX_Ret, 170, 280, 90, GRAY);
+            DrawRectangleRec(start, GRAY);
             DrawText("Start", posX_Ret + 80, 170 + 25, 35, BLACK);
         }
-        if (pos.x > posX_Ret && pos.x < 453 && pos.y > 353 && pos.y < 437)
+        if (CheckCollisionPointRec(pos, sair))
         {
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 CloseWindow();
             }
-            DrawRectangle(posX_Ret, 350, 280, 90, RED);
+            DrawRectangleRec(sair, RED);
             DrawText("Sair", posX_Ret + 80, 350 + 25, 35, WHITE);
         } else {
-            DrawRectangle(posX_Ret, 350, 280, 90, GRAY);
-        DrawText("Sair", posX_Ret + 80, 350 + 25, 35, BLACK);
+            DrawRectangleRec(sair, GRAY);
+            DrawText("Sair", posX_Ret + 80, 350 + 25, 35, BLACK);
         }
-        
-        
         EndDrawing();
     }
     CloseWindow();
     return 0;
 }
 void Manual(){
+    Rectangle comecar;
+    comecar.height = 90;
+    comecar.width = 280;
+    comecar.x = 225;
+    comecar.y = 400;
     while (!WindowShouldClose())
     {
         Vector2 pos = GetMousePosition();
@@ -55,15 +75,16 @@ void Manual(){
         DrawRectangle(80, 60, 570, 305, GRAY);
         // dois /n e um bom espacamento de linha
         DrawText(TextFormat("MANUAL:\n\nTestando"), 80, 60, 20, BLACK);
-        if (pos.x > posX_Ret && pos.x < 453 && pos.y > 400 && pos.y < 487)
+        
+        if (CheckCollisionPointRec(pos, comecar))
         {
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                Joguinho();
+                CloseWindow();
             }
-            DrawRectangle(posX_Ret, 400, 280, 90, RED);
+            DrawRectangleRec(comecar, RED);
             DrawText("Começar", posX_Ret + 80, 400 + 25, 35, WHITE);
         } else {
-            DrawRectangle(posX_Ret, 400, 280, 90, GRAY);
+            DrawRectangleRec(comecar, GRAY);
             DrawText("Começar", posX_Ret + 80, 400 + 25, 35, BLACK);
         }
         EndDrawing();
