@@ -19,12 +19,12 @@ void Joguinho(){
     int lar = 720, alt = 540, jump_height = 60;
     InitWindow(lar, alt, "Jogo");
     personagem persona1;
-    persona1.target.height = 110;
-    persona1.target.width = 110;
+    persona1.target.height = 97;
+    persona1.target.width = 86;
     Image imagem = LoadImage("fundo2.png");
     ImageResizeNN(&imagem, lar, alt);
-    Image personagem = LoadImage("personagem.png");
-    ImageResizeNN(&personagem, 110, 110);
+    Image personagem = LoadImage("personagem-menor.png");
+    ImageResizeNN(&personagem, 86, 97);
     persona1.textura = LoadTextureFromImage(personagem);
     Texture2D textura = LoadTextureFromImage(imagem);
     Image Espe_im = LoadImage("espada.png");
@@ -32,7 +32,7 @@ void Joguinho(){
     ImageResizeNN(&Espe_im, 50, 50);
     Texture2D espada = LoadTextureFromImage(Espe_im);
 
-    persona1.target.x = lar / 2, persona1.target.y = 404;
+    persona1.target.x = lar / 2, persona1.target.y = 414;
     int space = 0;
     bool Jump = true, hit = true;
     char dir = 'D';
@@ -47,8 +47,11 @@ void Joguinho(){
     // FPS tava influenciando na movimentacao, agora ta mais devagar
     SetTargetFPS(40);
     char morto = 'A';
+    int w = 86, h = 97;
+    int lifes = 100;
     while (!WindowShouldClose())
     {
+        double time = GetTime();
         // master volume é uma bosta, muito paia
         //SetMasterVolume(100.0);
         //PlaySound(som);
@@ -60,7 +63,6 @@ void Joguinho(){
         }
         Vector2 mouse = GetMousePosition();
         //printf("%f-%f\n", mouse.x, mouse.y);
-        // alguma coisa ta mexendo com a velocidade
         if (IsKeyDown(KEY_RIGHT))
         {
             persona1.target.x += 5;
@@ -104,7 +106,7 @@ void Joguinho(){
         {
             persona1.target.y += 5;
         }
-        if (persona1.target.y >= 404)
+        if (persona1.target.y >= 414)
         {
             hit = true, Jump = true;
         }
@@ -112,7 +114,7 @@ void Joguinho(){
         { 
             persona1.velo = -PJS;
             Jump = false, hit = false;
-            PlaySound(jumpS);
+            //PlaySound(jumpS);
         }
         if (!hit)
         {
@@ -169,18 +171,37 @@ void Joguinho(){
         }
         DrawTexture(persona1.textura, persona1.target.x, persona1.target.y, WHITE);
         DrawTexture(espada, posEspada + persona1.target.x, persona1.target.y + 55, WHITE);
-        DrawRectangleLines(persona1.target.x, persona1.target.y, 110, 110, RED);
+        // debug do hitbox
+        //DrawRectangleLines(persona1.target.x, persona1.target.y, w, h, RED);
+        DrawText(TextFormat("Tempo: %.2fs\n", time), 60, 80, 20, RED);
+        // ver como ta o sistema de vida
+        DrawText("Vida: ", 60, 105, 20, RED);
+        
+        if ((lifes * 1.5) >= 75)
+        {
+            DrawRectangle(115, 107, (lifes * 1.5), 17, GREEN);
+        } else if ((lifes * 1.5) < 75 && (lifes * 1.5) >= 40)
+        {
+            DrawRectangle(115, 107, (lifes * 1.5), 17, ORANGE);
+        } else if ((lifes * 1.5) < 40)
+        {
+            DrawRectangle(115, 107, (lifes * 1.5), 17, RED);
+        }
         if (morto == 'A')
         {
             DrawRectangleRec(enemy, RED);
         }
-        if (CheckCollisionRecs(persona1.target, enemy))
+        if (CheckCollisionRecs(persona1.target, enemy) && morto == 'A')
         {
-            DrawText("MOrreu", 100, 100, 40, RED);
-        } else {
-            printf("Viva\n");
+            //DrawText("MOrreu", 100, 100, 40, RED);
+            lifes--;
         }
-        // DrawText("Jogo iniciado", 100, 100, 30, RED);
+        if ((lifes * 1.5) <= 0)
+        {
+            CloseWindow();
+        }
+        
+        //printf("%f-%f\n", mouse.x, mouse.y);
         EndDrawing();
     }
 }
