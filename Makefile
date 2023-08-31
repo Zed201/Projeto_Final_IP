@@ -1,5 +1,5 @@
 # Se for trocar o nome do arquivo princial so troca o nome dele aqui, no caso troca index por main...
-Bin=jogo
+Bin=run_jump
 
 # Make apenas para facilitar o build dos .c com raylib, so digitar make para dar build, criar a pasta com nome build, e executar
 # make rm, vai remover a pasta e o arquivo excutavel
