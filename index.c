@@ -1,93 +1,56 @@
 #include <stdio.h>
 #include "raylib.h"
-//#include "jogo.c"
-#define posX_Ret 225
-void Manual();
-typedef struct 
-{
-    // Implementar essa struct para as coisas ficarem mais faceis
-    Rectangle frame;
-    char string[100];
-} botao;
+#include "include/structs_def.c"
+#include "include/jogo.c"
+#include "include/manual.c"
 
 int main()
 {
-    int lar = 720, alt = 540;
-    Rectangle start, sair, comecar;
-    start.height = 90;
-    start.width = 280;
-    sair.height = 90;
-    sair.width = 280;
-    start.x = 225;
-    start.y = 170;
-    sair.x = 225;
-    sair.y = 350;
-    
+    botao start, sair, comecar;
+    start.frame.height = 90;
+    start.frame.width = 280;
+    sair.frame.height = 90;
+    sair.frame.width = 280;
+    start.frame.x = 225;
+    start.frame.y = 170;
+    sair.frame.x = 225;
+    sair.frame.y = 350;
+    strcpy(start.string, "Start");
+    strcpy(sair.string, "Sair");
     InitWindow(lar, alt, "Testando Menu");
-    Image imagem = LoadImage("fundo.png");
+    Image imagem = LoadImage("assets/imgs/fundo.png");
     ImageResizeNN(&imagem, lar, alt);
     Texture2D textura = LoadTextureFromImage(imagem);
+
     while (!WindowShouldClose())
     {
         Vector2 pos = GetMousePosition();
-        //printf("%f-%f\n", pos.x, pos.y);
         BeginDrawing();
         DrawTexture(textura, 0, 0, WHITE);
-        if (CheckCollisionPointRec(pos, start))
+        if (CheckCollisionPointRec(pos, start.frame))
         {
-            DrawRectangleRec(start, RED);
-            DrawText("Start", posX_Ret + 80, 170 + 25, 35, WHITE);
+            DrawRectangleRec(start.frame, RED);
+            DrawText(start.string, posX_Ret + 80, 170 + 25, 35, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 Manual();
             }
         } else {
-            DrawRectangleRec(start, GRAY);
-            DrawText("Start", posX_Ret + 80, 170 + 25, 35, BLACK);
+            DrawRectangleRec(start.frame, GRAY);
+            DrawText(start.string, posX_Ret + 80, 170 + 25, 35, BLACK);
         }
-        if (CheckCollisionPointRec(pos, sair))
+        if (CheckCollisionPointRec(pos, sair.frame))
         {
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 CloseWindow();
             }
-            DrawRectangleRec(sair, RED);
-            DrawText("Sair", posX_Ret + 80, 350 + 25, 35, WHITE);
+            DrawRectangleRec(sair.frame, RED);
+            DrawText(sair.string, posX_Ret + 80, 350 + 25, 35, WHITE);
         } else {
-            DrawRectangleRec(sair, GRAY);
-            DrawText("Sair", posX_Ret + 80, 350 + 25, 35, BLACK);
+            DrawRectangleRec(sair.frame, GRAY);
+            DrawText(sair.string, posX_Ret + 80, 350 + 25, 35, BLACK);
         }
         EndDrawing();
     }
     CloseWindow();
     return 0;
-}
-void Manual(){
-    Rectangle comecar;
-    comecar.height = 90;
-    comecar.width = 280;
-    comecar.x = 225;
-    comecar.y = 400;
-    while (!WindowShouldClose())
-    {
-        Vector2 pos = GetMousePosition();
-        //printf("%f-%f\n", pos.x, pos.y);
-        BeginDrawing();
-        ClearBackground(WHITE);
-        DrawRectangle(80, 60, 570, 305, GRAY);
-        // dois /n e um bom espacamento de linha
-        DrawText(TextFormat("MANUAL:\n\nTestando"), 80, 60, 20, BLACK);
-        
-        if (CheckCollisionPointRec(pos, comecar))
-        {
-            if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                CloseWindow();
-            }
-            DrawRectangleRec(comecar, RED);
-            DrawText("Começar", posX_Ret + 80, 400 + 25, 35, WHITE);
-        } else {
-            DrawRectangleRec(comecar, GRAY);
-            DrawText("Começar", posX_Ret + 80, 400 + 25, 35, BLACK);
-        }
-        EndDrawing();
-    }
-    
 }

@@ -1,68 +1,58 @@
-#include <stdio.h>
-#include "raylib.h"
-#include "raymath.h"
-void Joguinho();
-int main()
-{
-    Joguinho();
-    return 0;
-}
-#define G 350
-#define PJS 250.0f
-#define PHS 110.0f
-typedef struct{
-    Rectangle target;
-    Texture2D textura;
-    float velo;
-}personagem;
-void Joguinho(){
-    int lar = 720, alt = 540, jump_height = 60;
-    InitWindow(lar, alt, "Jogo");
+void jogo_fase1(){
+    // Inicializacao do fundo
+    Image fundo = LoadImage("assets/imgs/fundo2.png");
+    ImageResizeNN(&fundo, lar, alt);
+    Texture2D textura_fundo = LoadTextureFromImage(fundo);
+
+    // Inicializacao do personagem
     personagem persona1;
     persona1.target.height = 97;
     persona1.target.width = 86;
-    Image imagem = LoadImage("fundo2.png");
-    ImageResizeNN(&imagem, lar, alt);
-    Image personagem = LoadImage("personagem-menor.png");
+    Image personagem = LoadImage("assets/imgs/personagem-menor.png");
     ImageResizeNN(&personagem, 86, 97);
     persona1.textura = LoadTextureFromImage(personagem);
-    Texture2D textura = LoadTextureFromImage(imagem);
-    Image Espe_im = LoadImage("espada.png");
+    persona1.target.x = lar / 2, persona1.target.y = 414;
+
+    // Inicializacao da espada/arma e flip dela para acertar a posicao
+    arma Espada;
+    Image Espe_im = LoadImage("assets/imgs/espada.png");
     ImageFlipHorizontal(&Espe_im);
     ImageResizeNN(&Espe_im, 50, 50);
-    Texture2D espada = LoadTextureFromImage(Espe_im);
+    Espada.textura = LoadTextureFromImage(Espe_im);
+    Espada.target.height = Espada.textura.height;
+    Espada.target.width = Espada.textura.width;
 
-    persona1.target.x = lar / 2, persona1.target.y = 414;
-    int space = 0;
-    bool Jump = true, hit = true;
-    char dir = 'D';
+    // Parte de audio
     InitAudioDevice();
-    Sound som = LoadSound("zelda.mp3");
-    Sound jumpS = LoadSoundFromWave(LoadWave("sound.wav"));
+    Music musica = LoadMusicStream("assets/sounds/zelda.mp3");
+    PlayMusicStream(musica);
+    Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
+
     Rectangle enemy;
     enemy.height = 30;
     enemy.width = 30;
     enemy.x = lar - 50, enemy.y = 484;
-    char Espa_Cont = 'C';
-    // FPS tava influenciando na movimentacao, agora ta mais devagar
+
+    // Variaveis de controleF
+    int space = 0, lifes = 100, posEspada = 0;
+    char dir = 'D', morto = 'A', Espa_Cont = 'C';
+    bool Jump = true, hit = true;
     SetTargetFPS(40);
-    char morto = 'A';
-    int w = 86, h = 97;
-    int lifes = 100;
     while (!WindowShouldClose())
     {
-        double time = GetTime();
-        // master volume é uma bosta, muito paia
-        //SetMasterVolume(100.0);
-        //PlaySound(som);
-        float delta = GetFrameTime();
+        // Atualizacao da colisao da arma
+        Espada.target.x = posEspada + persona1.target.x;
+        Espada.target.y = persona1.target.y + 55;
 
-        //printf("%d\n", fps);
+        double time = GetTime();
+        float delta = GetFrameTime();
+        SetMasterVolume(5.0);
+        Vector2 mouse = GetMousePosition();
+        //UpdateMusicStream(musica);
+        // Logica de movimentacao do personagem
         if(Jump == 1 && space == 0){
             Jump = 0;
         }
-        Vector2 mouse = GetMousePosition();
-        //printf("%f-%f\n", mouse.x, mouse.y);
         if (IsKeyDown(KEY_RIGHT))
         {
             persona1.target.x += 5;
@@ -71,7 +61,7 @@ void Joguinho(){
                 dir = 'D';
                 ImageFlipHorizontal(&personagem);
                 ImageFlipHorizontal(&Espe_im);
-                espada = LoadTextureFromImage(Espe_im);
+                Espada.textura = LoadTextureFromImage(Espe_im);
                 persona1.textura = LoadTextureFromImage(personagem);
             }
             
@@ -84,7 +74,7 @@ void Joguinho(){
                 dir = 'E';
                 ImageFlipHorizontal(&personagem);
                 ImageFlipHorizontal(&Espe_im);
-                espada = LoadTextureFromImage(Espe_im);
+                Espada.textura = LoadTextureFromImage(Espe_im);
                 persona1.textura = LoadTextureFromImage(personagem);
             }
         }
@@ -114,7 +104,7 @@ void Joguinho(){
         { 
             persona1.velo = -PJS;
             Jump = false, hit = false;
-            //PlaySound(jumpS);
+            PlaySound(jumpS);
         }
         if (!hit)
         {
@@ -127,17 +117,23 @@ void Joguinho(){
             WaitTime(0.3);
             Espa_Cont = 'C';
             ImageFlipVertical(&Espe_im);
-            espada = LoadTextureFromImage(Espe_im);
-            //printf("Subiu\n");
+            Espada.textura = LoadTextureFromImage(Espe_im);
         }
         if (IsKeyPressed(KEY_P) && Espa_Cont == 'C')
         {
                 ImageFlipVertical(&Espe_im);
-                espada = LoadTextureFromImage(Espe_im);
+                Espada.textura = LoadTextureFromImage(Espe_im);
                 Espa_Cont = 'B';
-                //printf("Abaixou\n");
         }
-        // Controle dos inimigos
+
+        if (dir == 'D')
+        {
+            posEspada = 60;
+        } else {
+            posEspada = -5;
+        }
+        
+        // Controle do inimigo
         int dist = persona1.target.x - enemy.x;
         if (dist < 0)
         {
@@ -147,36 +143,28 @@ void Joguinho(){
         {
             enemy.x += 0.5;
         }
-        
-
-        // printf("%f\n", persona1.target.y);
-        BeginDrawing();
-        DrawTexture(textura, 0, 0, WHITE);
-        int posEspada = 0;
-        if (dir == 'D')
-        {
-            posEspada = 60;
-        } else {
-            posEspada = -5;
-        }
-        Rectangle esp_Box;
-        esp_Box.height = espada.height;
-        esp_Box.width = espada.width;
-        esp_Box.x = posEspada + persona1.target.x;
-        esp_Box.y = persona1.target.y + 55;
-
-        if (CheckCollisionRecs(enemy, esp_Box) && Espa_Cont == 'B')
+        // Check de colisao entre inimigo e espada
+        if (CheckCollisionRecs(enemy, Espada.target) && Espa_Cont == 'B')
         {
             morto = 'D';
         }
+        // Faz a colisao da vida do personagem
+        if (CheckCollisionRecs(persona1.target, enemy) && morto == 'A')
+        {
+            lifes--;
+        }
+        if ((lifes * 1.5) <= 0)
+        {
+            CloseWindow();
+        }
+
+        BeginDrawing();
+        DrawTexture(textura_fundo, 0, 0, WHITE);
         DrawTexture(persona1.textura, persona1.target.x, persona1.target.y, WHITE);
-        DrawTexture(espada, posEspada + persona1.target.x, persona1.target.y + 55, WHITE);
-        // debug do hitbox
-        //DrawRectangleLines(persona1.target.x, persona1.target.y, w, h, RED);
+        DrawTexture(Espada.textura, posEspada + persona1.target.x, persona1.target.y + 55, WHITE);
         DrawText(TextFormat("Tempo: %.2fs\n", time), 60, 80, 20, RED);
-        // ver como ta o sistema de vida
         DrawText("Vida: ", 60, 105, 20, RED);
-        
+        // Barrinha de vida
         if ((lifes * 1.5) >= 75)
         {
             DrawRectangle(115, 107, (lifes * 1.5), 17, GREEN);
@@ -187,21 +175,11 @@ void Joguinho(){
         {
             DrawRectangle(115, 107, (lifes * 1.5), 17, RED);
         }
+        // so desenha o inimigo se ele estiver vivo
         if (morto == 'A')
         {
             DrawRectangleRec(enemy, RED);
         }
-        if (CheckCollisionRecs(persona1.target, enemy) && morto == 'A')
-        {
-            //DrawText("MOrreu", 100, 100, 40, RED);
-            lifes--;
-        }
-        if ((lifes * 1.5) <= 0)
-        {
-            CloseWindow();
-        }
-        
-        //printf("%f-%f\n", mouse.x, mouse.y);
         EndDrawing();
     }
 }
