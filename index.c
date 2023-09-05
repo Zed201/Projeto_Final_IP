@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "raylib.h"
 #include "include/structs_def.c"
+#include "include/saveTime.c"
 #include "include/jogo.c"
 #include "include/manual.c"
 

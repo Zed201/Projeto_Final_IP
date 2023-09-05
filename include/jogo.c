@@ -155,7 +155,7 @@ void jogo_fase1(){
         }
         if ((lifes * 1.5) <= 0)
         {
-            CloseWindow();
+            putName(time);
         }
 
         BeginDrawing();

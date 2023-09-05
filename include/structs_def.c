@@ -13,6 +13,11 @@ typedef struct
     Rectangle frame;
     char string[100];
 } botao;
+
+typedef struct{
+    char name[50];
+    float time;
+} Record;
 // Posicao do botao do menu
 #define posX_Ret 225
 // Tamanho da janela
@@ -22,3 +27,4 @@ typedef struct
 #define G 350
 #define PJS 250.0f
 #define PHS 110.0f
+#define MAX_LEN 11
