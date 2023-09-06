@@ -8,8 +8,9 @@ void jogo_fase1(){
     personagem persona1;
     persona1.target.height = 97;
     persona1.target.width = 86;
-    Image personagem = LoadImage("assets/imgs/personagem-menor.png");
+    Image personagem = LoadImage("assets/imgs/acm.png");
     ImageResizeNN(&personagem, 86, 97);
+    ImageFlipHorizontal(&personagem);
     persona1.textura = LoadTextureFromImage(personagem);
     // ajustar esse valor onde ele começa, o 414 no caso, quando for trocar de sprite
     persona1.target.x = lar / 2, persona1.target.y = 414;
@@ -36,9 +37,11 @@ void jogo_fase1(){
     // Parte dos inimigos, inicializacao deles
     Color cores[5] = {RED, BLACK, YELLOW, GREEN, BLUE};
     inimigo inimigos[enemy_qtd];
+    Image ponteiros = LoadImage("assets/imgs/ponteiro.png");
+    ImageResizeNN(&ponteiros, enemy_heigth, enemy_width);
     for (int i = 0; i < enemy_qtd; i++)
     {
-        inimigos[i].textura;
+        inimigos[i].textura = LoadTextureFromImage(ponteiros);
         if (GetRandomValue(0,1)==0)
         { // inimigo nascem na diretia
             inimigos[i].target.x = GetRandomValue(100, 400) + lar;
@@ -228,12 +231,12 @@ void jogo_fase1(){
             
             if (inimigos[i].morto == 'N')
             {
-                DrawRectangleRec(inimigos[i].target, inimigos[i].cor);
+                //DrawRectangleRec(inimigos[i].target, inimigos[i].cor);
+                DrawTexture(inimigos[i].textura, inimigos[i].target.x, inimigos[i].target.y, WHITE);
             }
             if (inimigos[i].morto == 'S')
             {
                 qtd_mortos++;
-                printf("%d\n", qtd_mortos);
             }
         }
         if (qtd_mortos == enemy_qtd)

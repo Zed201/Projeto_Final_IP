@@ -17,7 +17,6 @@ void Manual(){
         {
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 jogo_fase1();
-                //viewSaves();
             }
             DrawRectangleRec(comecar.frame, RED);
             DrawText(comecar.string, posX_Ret + 80, 400 + 25, 35, WHITE);
