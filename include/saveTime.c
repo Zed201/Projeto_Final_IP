@@ -1,7 +1,7 @@
 void save(char *name, float time){
     //salvar tempo em arquivo txt
     FILE *arq;
-    arq = fopen("saves.txt", "w");
+    arq = fopen("saves.txt", "a");
     if(arq == NULL){
         printf("Erro ao abrir arquivo.\n");
         exit(1);
@@ -55,7 +55,7 @@ void viewSaves(){
         }
     }
     
-    InitWindow(lar, alt, "Saves");
+    //InitWindow(lar, alt, "Saves");
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -104,17 +104,17 @@ void viewSaves(){
 }
 void putName(float time){
     //InitWindow(alt, lar, "teste");
-    Rectangle voltar, avancar, textBox;
+    Rectangle hist, avancar, textBox;
     //dimensoes do botao
-    voltar.height = 90;
-    voltar.width = 220;
+    hist.height = 90;
+    hist.width = 220;
     avancar.height = 90;
     avancar.width = 220;
     textBox.height = 70;
     textBox.width = 300;
     //coordenadas do botao
-    voltar.x = 80;
-    voltar.y = 400;
+    hist.x = 80;
+    hist.y = 400;
     avancar.x = 430;
     avancar.y = 400;
     textBox.x = 220;
@@ -132,21 +132,21 @@ void putName(float time){
         BeginDrawing();
         ClearBackground(WHITE);
         DrawRectangle(80, 60, 570, 325, GRAY);
-        
-        DrawText(TextFormat("INSIRA SEU NOME"), 180, 80, 40, BLACK);
+        DrawText(TextFormat("PARABENS!  INSIRA SEU NOME"), 105, 80, 35, BLACK);
         
         //animacoes dos "retangulos"
         Vector2 pos = GetMousePosition();
-        if (CheckCollisionPointRec(pos, voltar))
+        if (CheckCollisionPointRec(pos, hist))
         {
-            DrawRectangleRec(voltar, RED);
-            DrawText("Voltar", 56 + 80, 400 + 25, 35, WHITE);
+            DrawRectangleRec(hist, RED);
+            DrawText("hist", 56 + 80, 400 + 25, 35, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                CloseWindow();
+                save(name, time);
+                viewSaves();
             }
         } else {
-            DrawRectangleRec(voltar, GRAY);
-            DrawText("Voltar", 56 + 80, 400 + 25, 35, BLACK);
+            DrawRectangleRec(hist, GRAY);
+            DrawText("hist", 56 + 80, 400 + 25, 35, BLACK);
         }
         
         if (CheckCollisionPointRec(pos, avancar))
