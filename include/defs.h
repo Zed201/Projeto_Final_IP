@@ -10,5 +10,3 @@
 #define dash_tam 25
 #define dash_multiper 4
 #define perso_lifes 1000
-
-#include "structs.c"

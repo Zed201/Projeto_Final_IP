@@ -1,3 +1,5 @@
+#include "raylib.h"
+#include "saveTime.h"
 void save(char *name, float time){
     //salvar tempo em arquivo txt
     FILE *arq;

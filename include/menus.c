@@ -1,3 +1,5 @@
+#include "raylib.h"
+#include "menus.h"
 
 void Manual(){
     botao comecar;

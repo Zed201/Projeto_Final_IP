@@ -1,10 +1,12 @@
+#ifndef STRUCTS_H
+#define STRUCTS_H
+
+#include "raylib.h"
 // Posicao do botao do menu
 #define posX_Ret 225
 // Tamanho da janela
 #define lar 720
 #define alt 540
-// Relacionados a mecanica de pulo
-
 
 typedef struct{
     Rectangle target;
@@ -41,3 +43,5 @@ typedef struct{
     char name[50];
     float time;
 } Record;
+
+#endif
