@@ -1,5 +1,10 @@
 #include "raylib.h"
 #include "saveTime.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "structs.h"
+#include "defs.h"
+
 void save(char *name, float time){
     //salvar tempo em arquivo txt
     FILE *arq;
@@ -12,6 +17,11 @@ void save(char *name, float time){
     fclose(arq);
 }
 void viewSaves(){
+    Color fundo;
+    fundo.r = 181;
+    fundo.g = 190;
+    fundo.b = 194;
+    fundo.a = 232;
     //InitWindow(alt, lar, "teste");
     Rectangle voltar;
     //dimensoes do botao
@@ -57,12 +67,16 @@ void viewSaves(){
         }
     }
     
-    //InitWindow(lar, alt, "Saves");
+    InitWindow(lar, alt, "Saves");
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawRectangle(80, 60, 570, 325, GRAY);
+        DrawRectangle(80, 60, 570, 325, fundo);
         
         //animacao do botao
         Vector2 pos = GetMousePosition();
@@ -74,7 +88,7 @@ void viewSaves(){
                 CloseWindow();
             }
         } else {
-            DrawRectangleRec(voltar, GRAY);
+            DrawRectangleRec(voltar, fundo);
             DrawText("Voltar", posX_Ret + 80, 400 + 25, 35, BLACK);
         }
         DrawText(TextFormat("RECORDS"), 310, 60, 20, BLACK);
@@ -105,6 +119,11 @@ void viewSaves(){
     CloseWindow();
 }
 void putName(float time){
+    Color fundo;
+    fundo.r = 181;
+    fundo.g = 190;
+    fundo.b = 194;
+    fundo.a = 232;
     //InitWindow(alt, lar, "teste");
     Rectangle hist, avancar, textBox;
     //dimensoes do botao
@@ -131,10 +150,14 @@ void putName(float time){
     //InitWindow(lar, alt, "<Nome>");
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawRectangle(80, 60, 570, 325, GRAY);
-        DrawText(TextFormat("PARABENS!  INSIRA SEU NOME"), 105, 80, 35, BLACK);
+        DrawRectangle(80, 60, 570, 325, fundo);
+        DrawText(TextFormat("PARABENS!  INSIRA SEU NOME"), 102, 80, 35, BLACK);
         
         //animacoes dos "retangulos"
         Vector2 pos = GetMousePosition();
@@ -147,7 +170,7 @@ void putName(float time){
                 viewSaves();
             }
         } else {
-            DrawRectangleRec(hist, GRAY);
+            DrawRectangleRec(hist, fundo);
             DrawText("hist", 56 + 80, 400 + 25, 35, BLACK);
         }
         
@@ -160,13 +183,13 @@ void putName(float time){
                 CloseWindow();
             }
         } else {
-            DrawRectangleRec(avancar, GRAY);
+            DrawRectangleRec(avancar, fundo);
             DrawText("Avançar", 394 + 80, 400 + 25, 35, BLACK);
         }
         
         if (CheckCollisionPointRec(pos, textBox))
         {
-            DrawRectangleRec(textBox, DARKGRAY);
+            DrawRectangleRec(textBox, fundo);
             DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
             SetMouseCursor(MOUSE_CURSOR_IBEAM);
             frameCounter++;
@@ -197,7 +220,7 @@ void putName(float time){
                 name[tam] = '\0';
             }
         } else {
-            DrawRectangleRec(textBox, DARKGRAY);
+            DrawRectangleRec(textBox, fundo);
             DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, BLACK);
             SetMouseCursor(MOUSE_CURSOR_DEFAULT);
             frameCounter=0;

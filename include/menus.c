@@ -1,5 +1,8 @@
 #include "raylib.h"
 #include "menus.h"
+#include <string.h>
+#include "structs.h"
+#include "defs.h"
 
 void Manual(){
     botao comecar;
@@ -8,13 +11,23 @@ void Manual(){
     comecar.frame.x = 225;
     comecar.frame.y = 400;
     strcpy(comecar.string, "Começar");
+    Color fundo;
+    fundo.r = 181;
+    fundo.g = 190;
+    fundo.b = 194;
+    fundo.a = 232;
+    Texture2D manual_png = LoadTextureFromImage(LoadImage("assets/imgs/manual.png"));
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
+
         Vector2 pos = GetMousePosition();
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawRectangle(80, 60, 570, 305, GRAY);
-        DrawText(TextFormat("MANUAL:\n\nTestando"), 80, 60, 20, BLACK);
+        DrawTexture(manual_png, 80, 60, WHITE);
         
         if (CheckCollisionPointRec(pos, comecar.frame))
         {
@@ -24,12 +37,12 @@ void Manual(){
             DrawRectangleRec(comecar.frame, RED);
             DrawText(comecar.string, posX_Ret + 80, 400 + 25, 35, WHITE);
         } else {
-            DrawRectangleRec(comecar.frame, GRAY);
+            DrawRectangleRec(comecar.frame, fundo);
             DrawText(comecar.string, posX_Ret + 80, 400 + 25, 35, BLACK);
         }
         EndDrawing();
     }
-    
+    UnloadTexture(manual_png);
 }
 
 void Menu_Inicial(){
@@ -42,17 +55,24 @@ void Menu_Inicial(){
     start.frame.y = 170;
     sair.frame.x = 225;
     sair.frame.y = 350;
+    Color fundo;
+    fundo.r = 181;
+    fundo.g = 190;
+    fundo.b = 194;
+    fundo.a = 232;
     strcpy(start.string, "Start");
     strcpy(sair.string, "Sair");
-    InitWindow(lar, alt, "Testando Menu");
-    Image imagem = LoadImage("assets/imgs/fundo.png");
-    ImageResizeNN(&imagem, lar, alt);
-    Texture2D textura = LoadTextureFromImage(imagem);
+    InitWindow(lar, alt, "Joguinho Massa");
+    
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
         Vector2 pos = GetMousePosition();
         BeginDrawing();
-        DrawTexture(textura, 0, 0, WHITE);
+        ClearBackground(WHITE);
         if (CheckCollisionPointRec(pos, start.frame))
         {
             DrawRectangleRec(start.frame, RED);
@@ -61,7 +81,7 @@ void Menu_Inicial(){
                 Manual();
             }
         } else {
-            DrawRectangleRec(start.frame, GRAY);
+            DrawRectangleRec(start.frame, fundo);
             DrawText(start.string, posX_Ret + 80, 170 + 25, 35, BLACK);
         }
         if (CheckCollisionPointRec(pos, sair.frame))
@@ -72,7 +92,7 @@ void Menu_Inicial(){
             DrawRectangleRec(sair.frame, RED);
             DrawText(sair.string, posX_Ret + 80, 350 + 25, 35, WHITE);
         } else {
-            DrawRectangleRec(sair.frame, GRAY);
+            DrawRectangleRec(sair.frame, fundo);
             DrawText(sair.string, posX_Ret + 80, 350 + 25, 35, BLACK);
         }
         EndDrawing();

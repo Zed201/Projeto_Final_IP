@@ -1,3 +1,8 @@
+#include "fase1.h"
+#include "raylib.h"
+#include "structs.h"
+#include "defs.h"
+
 void jogo_fase1(){
     // Inicializacao do fundo
     Image fundo = LoadImage("assets/imgs/fundo2.png");
@@ -66,6 +71,10 @@ void jogo_fase1(){
     SetTargetFPS(40);
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
         // Atualizacao da colisao da arma
         Espada.target.x = Espada.posEspada + persona1.target.x;
         Espada.target.y = persona1.target.y + 55;
@@ -81,7 +90,7 @@ void jogo_fase1(){
             persona1.Jump = 0;
         }
         // Andar para os lados e flipar o sprite da arma
-        if (IsKeyDown(KEY_RIGHT))
+        if (IsKeyDown(KEY_RIGHT) && persona1.target.x + persona1.textura.width < lar)
         {
             persona1.target.x += 5;
             if (dir == 'E')
@@ -94,7 +103,7 @@ void jogo_fase1(){
             }
             
         }
-        if (IsKeyDown(KEY_LEFT))
+        if (IsKeyDown(KEY_LEFT) && persona1.target.x > 0)
         {
             persona1.target.x -= 5;
             if (dir == 'D')
@@ -108,9 +117,20 @@ void jogo_fase1(){
         }
         // dash
         if (IsKeyPressed(KEY_D) && persona1.dash == true)
-        {
-            persona1.dash = false;
-            dash_counter = 0;
+        { // 70 é um valor arbitrário  que eu coloquei com base no sprite do personagem
+            if (persona1.target.x > border_extender && persona1.target.x + persona1.textura.width < lar - border_extender)
+            {
+                persona1.dash = false;
+                dash_counter = 0;
+            } else if ((persona1.target.x < border_extender ) && dir == 'D')
+            {
+                persona1.dash = false;
+                dash_counter = 0;
+            } else if (persona1.target.x + persona1.textura.width > lar - border_extender && dir == 'E')
+            {
+                persona1.dash = false;
+                dash_counter = 0;
+            }
         }
         if (!persona1.dash)
         {
@@ -128,15 +148,6 @@ void jogo_fase1(){
                 persona1.dash = true;
             }
         }
-        // apenas para debug
-        // if (IsKeyPressed(KEY_UP))
-        // {
-        //     persona1.target.y -= 5;
-        // }
-        // if (IsKeyPressed(KEY_DOWN))
-        // {
-        //     persona1.target.y += 5;
-        // }
         // limitador do chao do personagem
         if (persona1.target.y >= 414)
         {
@@ -231,7 +242,6 @@ void jogo_fase1(){
             
             if (inimigos[i].morto == 'N')
             {
-                //DrawRectangleRec(inimigos[i].target, inimigos[i].cor);
                 DrawTexture(inimigos[i].textura, inimigos[i].target.x, inimigos[i].target.y, WHITE);
             }
             if (inimigos[i].morto == 'S')
@@ -242,8 +252,24 @@ void jogo_fase1(){
         if (qtd_mortos == enemy_qtd)
         {
             ClearBackground(WHITE);
+            UnloadImage(fundo);
+            UnloadTexture(textura_fundo);
+            UnloadImage(personagem);
+            UnloadTexture(persona1.textura);
+            UnloadImage(Espe_im);
+            UnloadTexture(Espada.textura);
+            UnloadMusicStream(musica);
+            UnloadSound(jumpS);
+            UnloadImage(ponteiros);
+            for (int i = 0; i < enemy_qtd; i++)
+            {
+                UnloadTexture(inimigos[i].textura);
+            }
+            
             putName(time);
-        } else {
+        }
+        else
+        {
             qtd_mortos = 0;
         }
 

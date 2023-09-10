@@ -7,6 +7,7 @@
 #define enemy_width 30
 #define floor_y 484
 #define espe_tam 60
-#define dash_tam 25
-#define dash_multiper 4
+#define dash_tam 10
+#define dash_multiper 10
 #define perso_lifes 1000
+#define border_extender 70

@@ -4,6 +4,7 @@ Bin=index
 # Make apenas para facilitar o build dos .c com raylib, so digitar make para dar build, criar a pasta com nome build, e executar
 # make rm, vai remover a pasta e o arquivo excutavel
 # make ex vai apenas executar o arquivo
+# gcc index.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./Build/index.o
 
 # Ele apenas vai executar se tiver o .c
 all: $(Bin).c
