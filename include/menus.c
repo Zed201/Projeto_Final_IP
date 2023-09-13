@@ -5,6 +5,7 @@
 #include "defs.h"
 
 void Manual(){
+    // concertar a atualizar para a nova struct de botao
     botao comecar;
     comecar.frame.height = 90;
     comecar.frame.width = 280;
@@ -32,6 +33,7 @@ void Manual(){
         if (CheckCollisionPointRec(pos, comecar.frame))
         {
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                // colocar pequena transicao que tancreto fez
                 jogo_fase1();
             }
             DrawRectangleRec(comecar.frame, RED);
@@ -46,7 +48,8 @@ void Manual(){
 }
 
 void Menu_Inicial(){
-    botao start, sair, comecar;
+    // atualizar para a nova struct de botao
+    botao start, sair;
     start.frame.height = 90;
     start.frame.width = 280;
     sair.frame.height = 90;
@@ -63,9 +66,12 @@ void Menu_Inicial(){
     strcpy(start.string, "Start");
     strcpy(sair.string, "Sair");
     InitWindow(lar, alt, "Joguinho Massa");
-    Texture2D start_image = LoadTexture("assets/imgs/start.png");
-    Texture2D sair_image = LoadTexture("assets/imgs/sair.png");
-
+    Image start_image_out = LoadImage("assets/imgs/start_out.png");
+    Image start_image_in = LoadImage("assets/imgs/start_in.png");
+    ImageResize(&start_image_in, 300, 162/2);
+    ImageResize(&start_image_out, 300, 162/2);
+    Texture2D start_texture_out = LoadTextureFromImage(start_image_out);
+    Texture2D start_texture_in = LoadTextureFromImage(start_image_in);
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -77,24 +83,14 @@ void Menu_Inicial(){
         ClearBackground(WHITE);
         if (CheckCollisionPointRec(pos, start.frame))
         {
-            //DrawRectangleRec(start.frame, RED);
-            //DrawText(start.string, posX_Ret + 80, 170 + 25, 35, WHITE);
-            // se for colocar essas imagens tem que concertar a colisao, tomando como base a propria imagem
-             Rectangle frameRec = { 0.0f, start_image.height/2, start_image.width, start_image.height/2 };
-             Vector2 position = {posX_Ret + 80, 170 + 25};
-             DrawTextureRec(start_image, frameRec, position, WHITE);
-
+            DrawTexture(start_texture_in, start.frame.x, start.frame.y, WHITE);
+            
              if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
              {
                  Manual();
             }
         } else {
-            Rectangle frameRec = { 0.0f, 0.0f, start_image.width, start_image.height/2 };
-             Vector2 position = {posX_Ret + 80, 170 + 25};
-             DrawTextureRec(start_image, frameRec, position, WHITE);
-           /* DrawRectangleRec(start.frame, fundo);
-            DrawText(start.string, posX_Ret + 80, 170 + 25, 35, BLACK);
-            */
+           DrawTexture(start_texture_out, start.frame.x, start.frame.y, WHITE);
         }
         if (CheckCollisionPointRec(pos, sair.frame))
         {
@@ -109,5 +105,9 @@ void Menu_Inicial(){
         }
         EndDrawing();
     }
+    UnloadImage(start_image_out);
+    UnloadImage(start_image_in);
+    UnloadTexture(start_texture_in);
+    UnloadTexture(start_texture_out);
     CloseWindow();
 }
