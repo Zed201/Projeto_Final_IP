@@ -35,8 +35,10 @@ void jogo_fase1(){
 
     // Parte de audio
     InitAudioDevice();
-    Music musica = LoadMusicStream("assets/sounds/zelda.mp3");
-    PlayMusicStream(musica);
+    Music musica = LoadMusicStream("assets/sounds/music.mp3");
+    // PlayMusicStream(musica);
+    // SetMusicVolume(musica,5);
+    // musica ta muito alta
     Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
 
     // Parte dos inimigos, inicializacao deles
@@ -83,7 +85,7 @@ void jogo_fase1(){
         double time = GetTime();
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
-        //UpdateMusicStream(musica);
+        UpdateMusicStream(musica);
 
         // Logica de movimentacao do personagem
         if(persona1.Jump == 1 && space == 0){
@@ -265,7 +267,6 @@ void jogo_fase1(){
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            
             putName(time);
         }
         else

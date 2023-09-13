@@ -63,7 +63,9 @@ void Menu_Inicial(){
     strcpy(start.string, "Start");
     strcpy(sair.string, "Sair");
     InitWindow(lar, alt, "Joguinho Massa");
-    
+    Texture2D start_image = LoadTexture("assets/imgs/start.png");
+    Texture2D sair_image = LoadTexture("assets/imgs/sair.png");
+
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -75,14 +77,24 @@ void Menu_Inicial(){
         ClearBackground(WHITE);
         if (CheckCollisionPointRec(pos, start.frame))
         {
-            DrawRectangleRec(start.frame, RED);
-            DrawText(start.string, posX_Ret + 80, 170 + 25, 35, WHITE);
-            if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                Manual();
+            //DrawRectangleRec(start.frame, RED);
+            //DrawText(start.string, posX_Ret + 80, 170 + 25, 35, WHITE);
+            // se for colocar essas imagens tem que concertar a colisao, tomando como base a propria imagem
+             Rectangle frameRec = { 0.0f, start_image.height/2, start_image.width, start_image.height/2 };
+             Vector2 position = {posX_Ret + 80, 170 + 25};
+             DrawTextureRec(start_image, frameRec, position, WHITE);
+
+             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+             {
+                 Manual();
             }
         } else {
-            DrawRectangleRec(start.frame, fundo);
+            Rectangle frameRec = { 0.0f, 0.0f, start_image.width, start_image.height/2 };
+             Vector2 position = {posX_Ret + 80, 170 + 25};
+             DrawTextureRec(start_image, frameRec, position, WHITE);
+           /* DrawRectangleRec(start.frame, fundo);
             DrawText(start.string, posX_Ret + 80, 170 + 25, 35, BLACK);
+            */
         }
         if (CheckCollisionPointRec(pos, sair.frame))
         {

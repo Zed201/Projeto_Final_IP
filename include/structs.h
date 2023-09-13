@@ -3,10 +3,7 @@
 
 #include "raylib.h"
 // Posicao do botao do menu
-#define posX_Ret 225
-// Tamanho da janela
-#define lar 720
-#define alt 540
+
 
 typedef struct{
     Rectangle target;

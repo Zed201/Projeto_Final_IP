@@ -11,3 +11,7 @@
 #define dash_multiper 10
 #define perso_lifes 1000
 #define border_extender 70
+#define posX_Ret 225
+// Tamanho da janela
+#define lar 720
+#define alt 540
