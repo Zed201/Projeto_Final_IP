@@ -17,19 +17,21 @@ void save(char *name, float time){
     fclose(arq);
 }
 void viewSaves(){
-    Color fundo;
-    fundo.r = 181;
-    fundo.g = 190;
-    fundo.b = 194;
-    fundo.a = 232;
-    //InitWindow(alt, lar, "teste");
-    Rectangle voltar;
-    //dimensoes do botao
-    voltar.height = 90;
-    voltar.width = 280;
+    Color fundo = {181, 190, 194, 232};
+    botao voltar;
     //coordenadas do botao
-    voltar.x = 225;
-    voltar.y = 400;
+    voltar.frame.height = 160/2;
+    voltar.frame.width = 280;
+    //dimensoes do botao•
+    voltar.frame.x = 225;
+    voltar.frame.y = 400;
+
+    voltar.ImagemOut = LoadImage("assets/imgs/sair_out.png");
+    voltar.ImagemIn = LoadImage("assets/imgs/sair_in.png");
+    ImageResize(&voltar.ImagemIn, voltar.frame.width, voltar.frame.height);
+    ImageResize(&voltar.ImagemOut, voltar.frame.width, voltar.frame.height);
+    Texture2D voltar_texture_out = LoadTextureFromImage(voltar.ImagemOut);
+    Texture2D voltar_texture_in = LoadTextureFromImage(voltar.ImagemIn);
     
     Record *saves=NULL;
     Record *aux=NULL;
@@ -66,8 +68,7 @@ void viewSaves(){
             }
         }
     }
-    
-    InitWindow(lar, alt, "Saves");
+
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -80,16 +81,14 @@ void viewSaves(){
         
         //animacao do botao
         Vector2 pos = GetMousePosition();
-        if (CheckCollisionPointRec(pos, voltar))
+        if (CheckCollisionPointRec(pos, voltar.frame))
         {
-            DrawRectangleRec(voltar, RED);
-            DrawText("Voltar", posX_Ret + 80, 400 + 25, 35, WHITE);
+            DrawTexture(voltar_texture_in, voltar.frame.x, voltar.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 CloseWindow();
             }
         } else {
-            DrawRectangleRec(voltar, fundo);
-            DrawText("Voltar", posX_Ret + 80, 400 + 25, 35, BLACK);
+            DrawTexture(voltar_texture_out, voltar.frame.x, voltar.frame.y, WHITE);
         }
         DrawText(TextFormat("RECORDS"), 310, 60, 20, BLACK);
         
@@ -116,6 +115,11 @@ void viewSaves(){
         }
         EndDrawing();
     }
+    UnloadImage(voltar.ImagemOut);
+    UnloadImage(voltar.ImagemIn);
+    UnloadTexture(voltar_texture_in);
+    UnloadTexture(voltar_texture_out);
+    
     CloseWindow();
 }
 void putName(float time){
@@ -125,19 +129,34 @@ void putName(float time){
     fundo.b = 194;
     fundo.a = 232;
     //InitWindow(alt, lar, "teste");
-    Rectangle hist, avancar, textBox;
+    botao hist, sair;
+    hist.frame.height = 160/2;
+    hist.frame.width = 250;
+    hist.frame.x = 80;
+    hist.frame.y = 400;
+    hist.ImagemOut = LoadImage("assets/imgs/hist_out.png");
+    hist.ImagemIn = LoadImage("assets/imgs/hist_in.png");
+    ImageResize(&hist.ImagemIn, hist.frame.width, hist.frame.height);
+    ImageResize(&hist.ImagemOut, hist.frame.width, hist.frame.height);
+    Texture2D hist_texture_out = LoadTextureFromImage(hist.ImagemOut);
+    Texture2D hist_texture_in = LoadTextureFromImage(hist.ImagemIn);
+
+    sair.frame.height = 160/2;
+    sair.frame.width = 250;
+    sair.frame.x = 430;
+    sair.frame.y = 400;
+    sair.ImagemOut = LoadImage("assets/imgs/sair_out.png");
+    sair.ImagemIn = LoadImage("assets/imgs/sair_in.png");
+    ImageResize(&sair.ImagemIn, sair.frame.width, sair.frame.height);
+    ImageResize(&sair.ImagemOut, sair.frame.width, sair.frame.height);
+    Texture2D sair_texture_out = LoadTextureFromImage(sair.ImagemOut);
+    Texture2D sair_texture_in = LoadTextureFromImage(sair.ImagemIn);
+
+    Rectangle textBox;
     //dimensoes do botao
-    hist.height = 90;
-    hist.width = 220;
-    avancar.height = 90;
-    avancar.width = 220;
     textBox.height = 70;
     textBox.width = 300;
     //coordenadas do botao
-    hist.x = 80;
-    hist.y = 400;
-    avancar.x = 430;
-    avancar.y = 400;
     textBox.x = 220;
     textBox.y = 200;
     
@@ -161,30 +180,26 @@ void putName(float time){
         
         //animacoes dos "retangulos"
         Vector2 pos = GetMousePosition();
-        if (CheckCollisionPointRec(pos, hist))
+        if (CheckCollisionPointRec(pos, hist.frame))
         {
-            DrawRectangleRec(hist, RED);
-            DrawText("hist", 56 + 80, 400 + 25, 35, WHITE);
+             DrawTexture(hist_texture_in, hist.frame.x, hist.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 save(name, time);
                 viewSaves();
             }
         } else {
-            DrawRectangleRec(hist, fundo);
-            DrawText("hist", 56 + 80, 400 + 25, 35, BLACK);
+            DrawTexture(hist_texture_out, hist.frame.x, hist.frame.y, WHITE);
         }
         
-        if (CheckCollisionPointRec(pos, avancar))
+        if (CheckCollisionPointRec(pos, sair.frame))
         {
-            DrawRectangleRec(avancar, RED);
-            DrawText("Avançar", 394 + 80, 400 + 25, 35, WHITE);
+             DrawTexture(sair_texture_in, sair.frame.x, sair.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 save(name, time);
                 CloseWindow();
             }
         } else {
-            DrawRectangleRec(avancar, fundo);
-            DrawText("Avançar", 394 + 80, 400 + 25, 35, BLACK);
+            DrawTexture(sair_texture_out, sair.frame.x, sair.frame.y, WHITE);
         }
         
         if (CheckCollisionPointRec(pos, textBox))
@@ -228,5 +243,13 @@ void putName(float time){
         DrawText(name, (int)textBox.x + 10, (int)textBox.y + 15, 40, MAROON);
         EndDrawing();
     }
+    UnloadImage(hist.ImagemOut);
+    UnloadImage(hist.ImagemIn);
+    UnloadTexture(hist_texture_in);
+    UnloadTexture(hist_texture_out);
+    UnloadImage(sair.ImagemOut);
+    UnloadImage(sair.ImagemIn);
+    UnloadTexture(hist_texture_in);
+    UnloadTexture(sair_texture_out);
 
 }

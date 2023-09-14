@@ -5,42 +5,42 @@
 #include "defs.h"
 
 void Manual(){
-    // concertar a atualizar para a nova struct de botao
     botao comecar;
-    comecar.frame.height = 90;
-    comecar.frame.width = 280;
+    comecar.frame.height = 160/2;
+    comecar.frame.width = 255;
     comecar.frame.x = 225;
     comecar.frame.y = 400;
-    strcpy(comecar.string, "Começar");
-    Color fundo;
-    fundo.r = 181;
-    fundo.g = 190;
-    fundo.b = 194;
-    fundo.a = 232;
+
+    comecar.ImagemOut = LoadImage("assets/imgs/comecar_out.png");
+    comecar.ImagemIn = LoadImage("assets/imgs/comecar_in.png");
+    ImageResize(&comecar.ImagemIn, comecar.frame.width, comecar.frame.height);
+    ImageResize(&comecar.ImagemOut, comecar.frame.width, comecar.frame.height);
+    Texture2D comecar_texture_out = LoadTextureFromImage(comecar.ImagemOut);
+    Texture2D comecar_texture_in = LoadTextureFromImage(comecar.ImagemIn);
+    Color fundo = {181, 190, 194, 232};
+
     Texture2D manual_png = LoadTextureFromImage(LoadImage("assets/imgs/manual.png"));
+
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
         {
             CloseWindow();
         }
-
         Vector2 pos = GetMousePosition();
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(fundo);
         DrawTexture(manual_png, 80, 60, WHITE);
         
         if (CheckCollisionPointRec(pos, comecar.frame))
         {
+            DrawTexture(comecar_texture_in, comecar.frame.x, comecar.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 // colocar pequena transicao que tancreto fez
                 jogo_fase1();
             }
-            DrawRectangleRec(comecar.frame, RED);
-            DrawText(comecar.string, posX_Ret + 80, 400 + 25, 35, WHITE);
         } else {
-            DrawRectangleRec(comecar.frame, fundo);
-            DrawText(comecar.string, posX_Ret + 80, 400 + 25, 35, BLACK);
+            DrawTexture(comecar_texture_out, comecar.frame.x, comecar.frame.y, WHITE);
         }
         EndDrawing();
     }
@@ -48,30 +48,35 @@ void Manual(){
 }
 
 void Menu_Inicial(){
-    // atualizar para a nova struct de botao
+    // tentar reduzir isso um pouco
     botao start, sair;
-    start.frame.height = 90;
-    start.frame.width = 280;
-    sair.frame.height = 90;
-    sair.frame.width = 280;
-    start.frame.x = 225;
+    start.frame.height = 160/2;
+    start.frame.width = 250;
+    start.frame.x = 240;
     start.frame.y = 170;
-    sair.frame.x = 225;
+
+    sair.frame.height = 155/2;
+    sair.frame.width = 255;
+    sair.frame.x = 240;
     sair.frame.y = 350;
-    Color fundo;
-    fundo.r = 181;
-    fundo.g = 190;
-    fundo.b = 194;
-    fundo.a = 232;
-    strcpy(start.string, "Start");
-    strcpy(sair.string, "Sair");
+
+    Color fundo = {181, 190, 194, 232};
     InitWindow(lar, alt, "Joguinho Massa");
-    Image start_image_out = LoadImage("assets/imgs/start_out.png");
-    Image start_image_in = LoadImage("assets/imgs/start_in.png");
-    ImageResize(&start_image_in, 300, 162/2);
-    ImageResize(&start_image_out, 300, 162/2);
-    Texture2D start_texture_out = LoadTextureFromImage(start_image_out);
-    Texture2D start_texture_in = LoadTextureFromImage(start_image_in);
+    start.ImagemOut = LoadImage("assets/imgs/start_out.png");
+    start.ImagemIn = LoadImage("assets/imgs/start_in.png");
+    ImageResize(&start.ImagemIn, start.frame.width, start.frame.height);
+    ImageResize(&start.ImagemOut, start.frame.width, start.frame.height);
+    Texture2D start_texture_out = LoadTextureFromImage(start.ImagemOut);
+    Texture2D start_texture_in = LoadTextureFromImage(start.ImagemIn);
+
+    sair.ImagemOut = LoadImage("assets/imgs/sair_out.png");
+    sair.ImagemIn = LoadImage("assets/imgs/sair_in.png");
+    ImageResize(&sair.ImagemIn, sair.frame.width, sair.frame.height);
+    ImageResize(&sair.ImagemOut, sair.frame.width, sair.frame.height);
+    Texture2D sair_texture_out = LoadTextureFromImage(sair.ImagemOut);
+    Texture2D sair_texture_in = LoadTextureFromImage(sair.ImagemIn);
+
+    
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -80,7 +85,7 @@ void Menu_Inicial(){
         }
         Vector2 pos = GetMousePosition();
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(fundo);
         if (CheckCollisionPointRec(pos, start.frame))
         {
             DrawTexture(start_texture_in, start.frame.x, start.frame.y, WHITE);
@@ -94,20 +99,23 @@ void Menu_Inicial(){
         }
         if (CheckCollisionPointRec(pos, sair.frame))
         {
+            DrawTexture(sair_texture_in, sair.frame.x, sair.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 CloseWindow();
             }
-            DrawRectangleRec(sair.frame, RED);
-            DrawText(sair.string, posX_Ret + 80, 350 + 25, 35, WHITE);
+        
         } else {
-            DrawRectangleRec(sair.frame, fundo);
-            DrawText(sair.string, posX_Ret + 80, 350 + 25, 35, BLACK);
+           DrawTexture(sair_texture_out, sair.frame.x, sair.frame.y, WHITE);
         }
         EndDrawing();
     }
-    UnloadImage(start_image_out);
-    UnloadImage(start_image_in);
+    UnloadImage(start.ImagemOut);
+    UnloadImage(start.ImagemIn);
     UnloadTexture(start_texture_in);
     UnloadTexture(start_texture_out);
+    UnloadImage(sair.ImagemOut);
+    UnloadImage(sair.ImagemIn);
+    UnloadTexture(start_texture_in);
+    UnloadTexture(sair_texture_out);
     CloseWindow();
 }

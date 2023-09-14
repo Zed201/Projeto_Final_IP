@@ -31,10 +31,10 @@ typedef struct
 } arma;
 
 typedef struct 
-{ // atualizar dps para ser compatível com a imagem que fabricio vai mandar
+{ 
     Rectangle frame;
-    char string[100];
-    // Image Imagem;
+    Image ImagemIn;
+    Image ImagemOut;
 } botao;
 
 typedef struct{

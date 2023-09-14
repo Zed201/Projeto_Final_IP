@@ -11,6 +11,7 @@ void jogo_fase1(){
 
     // Inicializacao do personagem
     personagem persona1;
+    persona1.velo = 0;
     persona1.target.height = 97;
     persona1.target.width = 86;
     Image personagem = LoadImage("assets/imgs/acm.png");
@@ -68,7 +69,7 @@ void jogo_fase1(){
 
     // Variaveis de controle
     int space = 0, dash_counter = 0, qtd_mortos = 0;
-    char dir = 'D', morto = 'A', Espa_Cont = 'C';
+    char dir = 'D', Espa_Cont = 'C';
     bool hit = true;
     SetTargetFPS(40);
     while (!WindowShouldClose())
@@ -81,7 +82,6 @@ void jogo_fase1(){
         Espada.target.x = Espada.posEspada + persona1.target.x;
         Espada.target.y = persona1.target.y + 55;
 
-        Vector2 mouse = GetMousePosition();
         double time = GetTime();
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
@@ -268,8 +268,8 @@ void jogo_fase1(){
                 UnloadTexture(inimigos[i].textura);
             }
             // no caso agora ele teria uma pausa para a segunda
-            // o put name na teoria seria chamado apenas na segunda fase
-            //putName(time);
+            // o put name na teoria seria chamado apenas na segunda fase e a transicao
+            putName(time);
         }
         else
         {
