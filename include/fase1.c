@@ -267,9 +267,7 @@ void jogo_fase1(){
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            // no caso agora ele teria uma pausa para a segunda
-            // o put name na teoria seria chamado apenas na segunda fase e a transicao
-            putName(time);
+            transicao(1, time);
         }
         else
         {

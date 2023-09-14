@@ -3,7 +3,34 @@
 #include <string.h>
 #include "structs.h"
 #include "defs.h"
-
+void transicao(int flag, float time){
+    Texture2D transicao1 = LoadTextureFromImage(LoadImage("assets/imgs/fase1-inicio.png"));
+    Texture2D transicao2 = LoadTextureFromImage(LoadImage("assets/imgs/fase2-inicio.png"));
+    while (!WindowShouldClose() && flag == 1)
+    {
+        BeginDrawing();
+        DrawTexture(transicao1, 0, 0, WHITE);
+        EndDrawing();
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
+        WaitTime(1.5);
+        jogo_fase1();
+    }
+    while (!WindowShouldClose() && flag == 2)
+    {
+        BeginDrawing();
+        DrawTexture(transicao2, 0, 0, WHITE);
+        EndDrawing();
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
+        WaitTime(1.5);
+        jogo_fase2(time);
+    }
+}
 void Manual(){
     botao comecar;
     comecar.frame.height = 160/2;
@@ -36,8 +63,7 @@ void Manual(){
         {
             DrawTexture(comecar_texture_in, comecar.frame.x, comecar.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                // colocar pequena transicao que tancreto fez
-                jogo_fase1();
+                transicao(1, 0);
             }
         } else {
             DrawTexture(comecar_texture_out, comecar.frame.x, comecar.frame.y, WHITE);
