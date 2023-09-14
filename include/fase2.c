@@ -1,17 +1,26 @@
-#include "fase1.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "raylib.h"
-#include "structs.h"
 #include "defs.h"
+#include "saveTime.c"
+#include "fase1.c"
+#include "menus.c"
 
-void jogo_fase1(){
-    // Inicializacao do fundo
+int main()
+{ 
+    jogo_fase2();
+    return 0 ;
+}
+void jogo_fase2() {
+    InitWindow(lar, alt, "Testando");
     Image fundo = LoadImage("assets/imgs/fundo2.png");
     ImageResizeNN(&fundo, lar, alt);
     Texture2D textura_fundo = LoadTextureFromImage(fundo);
 
     // Inicializacao do personagem
     personagem persona1;
-    persona1.velo = 0;
     persona1.target.height = 97;
     persona1.target.width = 86;
     Image personagem = LoadImage("assets/imgs/acm.png");
@@ -36,10 +45,8 @@ void jogo_fase1(){
 
     // Parte de audio
     InitAudioDevice();
-    Music musica = LoadMusicStream("assets/sounds/music.mp3");
-    // PlayMusicStream(musica);
-    // SetMusicVolume(musica,5);
-    // musica ta muito alta
+    Music musica = LoadMusicStream("assets/sounds/zelda.mp3");
+    PlayMusicStream(musica);
     Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
 
     // Parte dos inimigos, inicializacao deles
@@ -50,48 +57,39 @@ void jogo_fase1(){
     for (int i = 0; i < enemy_qtd; i++)
     {
         inimigos[i].textura = LoadTextureFromImage(ponteiros);
-        if (GetRandomValue(0,1)==0)
-        { // inimigo nascem na diretia
-            inimigos[i].target.x = GetRandomValue(100, 400) + lar;
-        } else {
-            // inimigos que nascem na esquerda
-            inimigos[i].target.x = 0;
-            inimigos[i].target.x -= GetRandomValue(100, 400);
-        }
-        inimigos[i].target.y = floor_y;
+        inimigos[i].target.x = GetRandomValue(0, lar - 20);
+        inimigos[i].target.y = -45;
         inimigos[i].target.width = enemy_width;
         inimigos[i].target.height = enemy_heigth;
         // por enquanto nenhuma textura
         inimigos[i].velo = GetRandomValue(1,3);
         inimigos[i].morto = 'N';
+        inimigos[i].chao = 'N';
     }
 
     // Variaveis de controle
-    int space = 0, dash_counter = 0, qtd_mortos = 0;
+    int space = 0, dash_counter = 0, qtd_mortos = 0, lol = 0;
     char dir = 'D', Espa_Cont = 'C';
     bool hit = true;
     SetTargetFPS(40);
     while (!WindowShouldClose())
     {
-        if (IsKeyPressed(KEY_O))
-        {
-            CloseWindow();
-        }
         // Atualizacao da colisao da arma
         Espada.target.x = Espada.posEspada + persona1.target.x;
         Espada.target.y = persona1.target.y + 55;
 
+        Vector2 mouse = GetMousePosition();
         double time = GetTime();
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
-        UpdateMusicStream(musica);
+        //UpdateMusicStream(musica);
 
         // Logica de movimentacao do personagem
         if(persona1.Jump == 1 && space == 0){
             persona1.Jump = 0;
         }
         // Andar para os lados e flipar o sprite da arma
-        if (IsKeyDown(KEY_RIGHT) && persona1.target.x + persona1.textura.width < lar)
+        if (IsKeyDown(KEY_RIGHT))
         {
             persona1.target.x += 5;
             if (dir == 'E')
@@ -104,7 +102,7 @@ void jogo_fase1(){
             }
             
         }
-        if (IsKeyDown(KEY_LEFT) && persona1.target.x > 0)
+        if (IsKeyDown(KEY_LEFT))
         {
             persona1.target.x -= 5;
             if (dir == 'D')
@@ -118,20 +116,9 @@ void jogo_fase1(){
         }
         // dash
         if (IsKeyPressed(KEY_D) && persona1.dash == true)
-        { // 70 é um valor arbitrário  que eu coloquei com base no sprite do personagem
-            if (persona1.target.x > border_extender && persona1.target.x + persona1.textura.width < lar - border_extender)
-            {
-                persona1.dash = false;
-                dash_counter = 0;
-            } else if ((persona1.target.x < border_extender ) && dir == 'D')
-            {
-                persona1.dash = false;
-                dash_counter = 0;
-            } else if (persona1.target.x + persona1.textura.width > lar - border_extender && dir == 'E')
-            {
-                persona1.dash = false;
-                dash_counter = 0;
-            }
+        {
+            persona1.dash = false;
+            dash_counter = 0;
         }
         if (!persona1.dash)
         {
@@ -189,19 +176,33 @@ void jogo_fase1(){
             Espada.posEspada = -5;
         }
         
+       
         // Controle do inimigo
-        for (int i = 0; i < enemy_qtd; i++)
-        {
-            int dist = persona1.target.x - inimigos[i].target.x;
-            if (dist < 0)
-            {
-                inimigos[i].target.x -= inimigos[i].velo;
-            }
-            if (dist > 0)
-            {
-                inimigos[i].target.x += inimigos[i].velo;
-            }
+        if(inimigos[lol].target.y == floor_y) {
+           lol += 1;
+           inimigos[lol].chao = 'S';
+        }
+        else {
+            inimigos[lol].target.y += 23;
+        }
+        
+            
+        for (int i = 0; i < enemy_qtd; i++) {  
+
             // checagem da colisao do inimigo com a espada
+            if (inimigos[i].chao == 'S')
+            {
+                // primeiro inimigo nao se move por algum motivo
+                int dist = persona1.target.x - inimigos[i].target.x;
+                if (dist < 0)
+                {
+                    inimigos[i].target.x -= inimigos[i].velo;
+                }
+                if (dist > 0)
+                {
+                    inimigos[i].target.x += inimigos[i].velo;
+                }
+            }
             if (CheckCollisionRecs(inimigos[i].target, Espada.target) && Espa_Cont == 'B')
             {
                 inimigos[i].morto = 'S';
@@ -243,7 +244,9 @@ void jogo_fase1(){
             
             if (inimigos[i].morto == 'N')
             {
+                //DrawRectangleRec(inimigos[i].target, inimigos[i].cor);
                 DrawTexture(inimigos[i].textura, inimigos[i].target.x, inimigos[i].target.y, WHITE);
+                
             }
             if (inimigos[i].morto == 'S')
             {
@@ -253,26 +256,13 @@ void jogo_fase1(){
         if (qtd_mortos == enemy_qtd)
         {
             ClearBackground(WHITE);
-            UnloadImage(fundo);
-            UnloadTexture(textura_fundo);
-            UnloadImage(personagem);
-            UnloadTexture(persona1.textura);
-            UnloadImage(Espe_im);
-            UnloadTexture(Espada.textura);
-            UnloadMusicStream(musica);
-            UnloadSound(jumpS);
-            UnloadImage(ponteiros);
-            for (int i = 0; i < enemy_qtd; i++)
-            {
-                UnloadTexture(inimigos[i].textura);
-            }
-            transicao(1, time);
-        }
-        else
-        {
+            putName(time);
+        } else {
             qtd_mortos = 0;
         }
 
         EndDrawing();
     }
+ 
+    CloseWindow();
 }

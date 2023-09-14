@@ -17,10 +17,10 @@ typedef struct{
 typedef struct 
 {
     Rectangle target;
-    Color cor;
     Texture2D textura;
     float velo;
     char morto;
+    char chao;
 } inimigo;
 
 typedef struct 
