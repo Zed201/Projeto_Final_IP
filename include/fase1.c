@@ -35,15 +35,14 @@ void jogo_fase1(){
     Espada.target.width = Espada.textura.width;
 
     // Parte de audio
-    InitAudioDevice();
-    Music musica = LoadMusicStream("assets/sounds/music.mp3");
+    //InitAudioDevice();
+    //Music musica = LoadMusicStream("assets/sounds/music.mp3");
     // PlayMusicStream(musica);
     // SetMusicVolume(musica,5);
     // musica ta muito alta
-    Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
+    //Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
 
     // Parte dos inimigos, inicializacao deles
-    Color cores[5] = {RED, BLACK, YELLOW, GREEN, BLUE};
     inimigo inimigos[enemy_qtd];
     Image ponteiros = LoadImage("assets/imgs/ponteiro.png");
     ImageResizeNN(&ponteiros, enemy_heigth, enemy_width);
@@ -61,7 +60,6 @@ void jogo_fase1(){
         inimigos[i].target.y = floor_y;
         inimigos[i].target.width = enemy_width;
         inimigos[i].target.height = enemy_heigth;
-        // por enquanto nenhuma textura
         inimigos[i].velo = GetRandomValue(1,3);
         inimigos[i].morto = 'N';
     }
@@ -84,7 +82,7 @@ void jogo_fase1(){
         double time = GetTime();
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
-        UpdateMusicStream(musica);
+        //UpdateMusicStream(musica);
 
         // Logica de movimentacao do personagem
         if(persona1.Jump == 1 && space == 0){
@@ -159,7 +157,7 @@ void jogo_fase1(){
         { 
             persona1.velo = -PJS;
             persona1.Jump = false, hit = false;
-            PlaySound(jumpS);
+            //PlaySound(jumpS);
         }
         if (!hit)
         {
@@ -259,8 +257,8 @@ void jogo_fase1(){
             UnloadTexture(persona1.textura);
             UnloadImage(Espe_im);
             UnloadTexture(Espada.textura);
-            UnloadMusicStream(musica);
-            UnloadSound(jumpS);
+            //UnloadMusicStream(musica);
+            //UnloadSound(jumpS);
             UnloadImage(ponteiros);
             for (int i = 0; i < enemy_qtd; i++)
             {

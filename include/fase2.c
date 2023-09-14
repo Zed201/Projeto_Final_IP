@@ -1,26 +1,17 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include "fase2.h"
 #include "raylib.h"
+#include "structs.h"
 #include "defs.h"
-#include "saveTime.c"
-#include "fase1.c"
-#include "menus.c"
 
-int main()
-{ 
-    jogo_fase2();
-    return 0 ;
-}
-void jogo_fase2() {
-    InitWindow(lar, alt, "Testando");
+void jogo_fase2(double time2) {
+    //InitWindow(lar, alt, "Testando");
     Image fundo = LoadImage("assets/imgs/fundo2.png");
     ImageResizeNN(&fundo, lar, alt);
     Texture2D textura_fundo = LoadTextureFromImage(fundo);
 
     // Inicializacao do personagem
     personagem persona1;
+    persona1.velo = 0;
     persona1.target.height = 97;
     persona1.target.width = 86;
     Image personagem = LoadImage("assets/imgs/acm.png");
@@ -45,12 +36,11 @@ void jogo_fase2() {
 
     // Parte de audio
     InitAudioDevice();
-    Music musica = LoadMusicStream("assets/sounds/zelda.mp3");
+    Music musica = LoadMusicStream("assets/sounds/music.mp3");
     PlayMusicStream(musica);
     Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
 
     // Parte dos inimigos, inicializacao deles
-    Color cores[5] = {RED, BLACK, YELLOW, GREEN, BLUE};
     inimigo inimigos[enemy_qtd];
     Image ponteiros = LoadImage("assets/imgs/ponteiro.png");
     ImageResizeNN(&ponteiros, enemy_heigth, enemy_width);
@@ -61,7 +51,6 @@ void jogo_fase2() {
         inimigos[i].target.y = -45;
         inimigos[i].target.width = enemy_width;
         inimigos[i].target.height = enemy_heigth;
-        // por enquanto nenhuma textura
         inimigos[i].velo = GetRandomValue(1,3);
         inimigos[i].morto = 'N';
         inimigos[i].chao = 'N';
@@ -79,7 +68,7 @@ void jogo_fase2() {
         Espada.target.y = persona1.target.y + 55;
 
         Vector2 mouse = GetMousePosition();
-        double time = GetTime();
+        double time = GetTime() + time2;
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
         //UpdateMusicStream(musica);
@@ -233,7 +222,7 @@ void jogo_fase2() {
             DrawRectangle(115, 107, (persona1.vida/10), 17, RED);
         }
         if ((persona1.vida/10) <= 0)
-        {
+        { // colocar telinha de morte
             ClearBackground(WHITE);
             CloseWindow();
         }
@@ -256,7 +245,24 @@ void jogo_fase2() {
         if (qtd_mortos == enemy_qtd)
         {
             ClearBackground(WHITE);
-            putName(time);
+            UnloadImage(fundo);
+            UnloadTexture(textura_fundo);
+            UnloadImage(personagem);
+            UnloadTexture(persona1.textura);
+            UnloadImage(Espe_im);
+            UnloadTexture(Espada.textura);
+            UnloadMusicStream(musica);
+            //UnloadSound(jumpS);
+            UnloadImage(ponteiros);
+            //StopMusicStream(musica);
+            //UnloadMusicStream(musica);
+
+            for (int i = 0; i < enemy_qtd; i++)
+            {
+                UnloadTexture(inimigos[i].textura);
+            }
+            transicao(1, time);
+
         } else {
             qtd_mortos = 0;
         }

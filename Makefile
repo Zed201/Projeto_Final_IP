@@ -1,5 +1,5 @@
 # Se for trocar o nome do arquivo princial so troca o nome dele aqui, no caso troca index por main...
-Bin=
+Bin= index
 
 # Make apenas para facilitar o build dos .c com raylib, so digitar make para dar build, criar a pasta com nome build, e executar
 # make rm, vai remover a pasta e o arquivo excutavel
@@ -10,7 +10,7 @@ Bin=
 all: $(Bin).c
 	@echo "Executando Build"
 	mkdir -p Build
-	gcc ./include/fase2.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./Build/$(Bin).o
+	gcc $(Bin).c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./Build/$(Bin).o
 	./Build/$(Bin).o
 	clear
 

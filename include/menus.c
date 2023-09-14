@@ -3,33 +3,31 @@
 #include <string.h>
 #include "structs.h"
 #include "defs.h"
-void transicao(int flag, float time){
+void transicao(int flag, double time){
     Texture2D transicao1 = LoadTextureFromImage(LoadImage("assets/imgs/fase1-inicio.png"));
     Texture2D transicao2 = LoadTextureFromImage(LoadImage("assets/imgs/fase2-inicio.png"));
-    while (!WindowShouldClose() && flag == 1)
+    
+    if (flag == 1)
     {
         BeginDrawing();
         DrawTexture(transicao1, 0, 0, WHITE);
         EndDrawing();
-        if (IsKeyPressed(KEY_O))
-        {
-            CloseWindow();
-        }
         WaitTime(1.5);
-        jogo_fase1();
-    }
-    while (!WindowShouldClose() && flag == 2)
-    {
+        UnloadTexture(transicao1);
+        UnloadTexture(transicao2);  
+        jogo_fase2(0);
+    } else {
+   
         BeginDrawing();
         DrawTexture(transicao2, 0, 0, WHITE);
         EndDrawing();
-        if (IsKeyPressed(KEY_O))
-        {
-            CloseWindow();
-        }
         WaitTime(1.5);
-        jogo_fase2(time);
+        UnloadTexture(transicao1);
+        UnloadTexture(transicao2);
+        //jogo_fase1();
+        Manual();
     }
+       
 }
 void Manual(){
     botao comecar;
@@ -63,6 +61,7 @@ void Manual(){
         {
             DrawTexture(comecar_texture_in, comecar.frame.x, comecar.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                UnloadTexture(manual_png);
                 transicao(1, 0);
             }
         } else {
@@ -118,6 +117,14 @@ void Menu_Inicial(){
             
              if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
              {
+                UnloadImage(start.ImagemOut);
+                UnloadImage(start.ImagemIn);
+                UnloadTexture(start_texture_in);
+                UnloadTexture(start_texture_out);
+                UnloadImage(sair.ImagemOut);
+                UnloadImage(sair.ImagemIn);
+                UnloadTexture(start_texture_in);
+                UnloadTexture(sair_texture_out);
                  Manual();
             }
         } else {
@@ -127,6 +134,14 @@ void Menu_Inicial(){
         {
             DrawTexture(sair_texture_in, sair.frame.x, sair.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                UnloadImage(start.ImagemOut);
+                UnloadImage(start.ImagemIn);
+                UnloadTexture(start_texture_in);
+                UnloadTexture(start_texture_out);
+                UnloadImage(sair.ImagemOut);
+                UnloadImage(sair.ImagemIn);
+                UnloadTexture(start_texture_in);
+                UnloadTexture(sair_texture_out);
                 CloseWindow();
             }
         
@@ -135,13 +150,6 @@ void Menu_Inicial(){
         }
         EndDrawing();
     }
-    UnloadImage(start.ImagemOut);
-    UnloadImage(start.ImagemIn);
-    UnloadTexture(start_texture_in);
-    UnloadTexture(start_texture_out);
-    UnloadImage(sair.ImagemOut);
-    UnloadImage(sair.ImagemIn);
-    UnloadTexture(start_texture_in);
-    UnloadTexture(sair_texture_out);
+    
     CloseWindow();
 }
