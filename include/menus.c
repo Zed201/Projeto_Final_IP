@@ -230,8 +230,7 @@ void Menu_Inicial(){
                 UnloadImage(sair.ImagemIn);
                 UnloadTexture(start_texture_in);
                 UnloadTexture(sair_texture_out);
-                 //Manual();
-                 MenuFinal();
+                Manual();
             }
         } else {
            DrawTexture(start_texture_out, start.frame.x, start.frame.y, WHITE);

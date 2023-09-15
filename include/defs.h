@@ -10,7 +10,7 @@
 #define dash_tam 10
 #define dash_multiper 10
 // #define perso_lifes 1000
-#define perso_lifes 100000
+#define perso_lifes 100
 #define border_extender 70
 #define posX_Ret 225
 // Tamanho da janela
