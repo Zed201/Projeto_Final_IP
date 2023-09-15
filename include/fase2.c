@@ -3,7 +3,7 @@
 #include "structs.h"
 #include "defs.h"
 
-void jogo_fase2(double time2) {
+void jogo_fase2() {
     //InitWindow(lar, alt, "Testando");
     Image fundo = LoadImage("assets/imgs/fundo2.png");
     ImageResizeNN(&fundo, lar, alt);
@@ -67,8 +67,8 @@ void jogo_fase2(double time2) {
         Espada.target.x = Espada.posEspada + persona1.target.x;
         Espada.target.y = persona1.target.y + 55;
 
-        Vector2 mouse = GetMousePosition();
-        double time = GetTime() + time2;
+        // reduz o tempo em 1.5 pois é o tempo da transicao
+        double time = GetTime() - transition_time;
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
         //UpdateMusicStream(musica);
@@ -261,7 +261,7 @@ void jogo_fase2(double time2) {
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            transicao(1, time);
+            CloseWindow();
 
         } else {
             qtd_mortos = 0;

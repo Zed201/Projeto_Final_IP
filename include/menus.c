@@ -3,31 +3,33 @@
 #include <string.h>
 #include "structs.h"
 #include "defs.h"
-void transicao(int flag, double time){
-    Texture2D transicao1 = LoadTextureFromImage(LoadImage("assets/imgs/fase1-inicio.png"));
-    Texture2D transicao2 = LoadTextureFromImage(LoadImage("assets/imgs/fase2-inicio.png"));
-    
-    if (flag == 1)
-    {
-        BeginDrawing();
-        DrawTexture(transicao1, 0, 0, WHITE);
-        EndDrawing();
-        WaitTime(1.5);
-        UnloadTexture(transicao1);
-        UnloadTexture(transicao2);  
-        jogo_fase2(0);
-    } else {
-   
-        BeginDrawing();
-        DrawTexture(transicao2, 0, 0, WHITE);
-        EndDrawing();
-        WaitTime(1.5);
-        UnloadTexture(transicao1);
-        UnloadTexture(transicao2);
-        //jogo_fase1();
-        Manual();
-    }
-       
+void transicao1(){
+        Texture2D transicao1 = LoadTextureFromImage(LoadImage("assets/imgs/fase1-inicio.png"));
+        while (!WindowShouldClose())
+        {
+            BeginDrawing();
+            DrawTexture(transicao1, 0, 0, WHITE);
+            EndDrawing();
+            WaitTime(transition_time);
+            UnloadTexture(transicao1);
+            jogo_fase1();
+        }
+        
+}
+
+void transicao2(){
+        Texture2D transicao2 = LoadTextureFromImage(LoadImage("assets/imgs/fase2-inicio.png"));
+        while (!WindowShouldClose())
+        {
+            BeginDrawing();
+            DrawTexture(transicao2, 0, 0, WHITE);
+            EndDrawing();
+            WaitTime(transition_time);
+            UnloadTexture(transicao2);
+            jogo_fase2();
+            //Manual();
+        }
+        
 }
 void Manual(){
     botao comecar;
@@ -62,7 +64,8 @@ void Manual(){
             DrawTexture(comecar_texture_in, comecar.frame.x, comecar.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 UnloadTexture(manual_png);
-                transicao(1, 0);
+                //jogo_fase1();
+                transicao1();
             }
         } else {
             DrawTexture(comecar_texture_out, comecar.frame.x, comecar.frame.y, WHITE);

@@ -16,3 +16,4 @@
 // Tamanho da janela
 #define lar 720
 #define alt 540
+#define transition_time 1.5

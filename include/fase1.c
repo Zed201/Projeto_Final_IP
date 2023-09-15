@@ -264,7 +264,8 @@ void jogo_fase1(){
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            transicao(1, time);
+            //transicao(1, time);
+           transicao2();
         }
         else
         {
