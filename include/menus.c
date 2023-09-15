@@ -31,6 +31,106 @@ void transicao2(){
         }
         
 }
+
+void MenuFinal(){
+
+    caixa_texto titulo;
+    titulo.frame.height = 90;
+    titulo.frame.width = 450;
+    titulo.frame.x = 150;
+    titulo.frame.y = 93;
+    strcpy(titulo.string, "Fim De Jogo");
+
+    botao recomecar, sair;
+    
+    recomecar.frame.height = 160/2;
+    recomecar.frame.width = 255;
+    recomecar.frame.x = 225;
+    recomecar.frame.y = 280;
+    
+    recomecar.ImagemOut = LoadImage("assets/imgs/reload_out.png");
+    recomecar.ImagemIn = LoadImage("assets/imgs/reload_in.png");
+    ImageResize(&recomecar.ImagemIn, recomecar.frame.width, recomecar.frame.height);
+    ImageResize(&recomecar.ImagemOut, recomecar.frame.width, recomecar.frame.height);
+    Texture2D recomecar_texture_out = LoadTextureFromImage(recomecar.ImagemOut);
+    Texture2D recomecar_texture_in = LoadTextureFromImage(recomecar.ImagemIn);
+    
+    sair.frame.height = 160/2;
+    sair.frame.width = 255;
+    sair.frame.x = 225;
+    sair.frame.y = 400;
+
+    sair.ImagemOut = LoadImage("assets/imgs/sair_out.png");
+    sair.ImagemIn = LoadImage("assets/imgs/sair_in.png");
+    ImageResize(&sair.ImagemIn, sair.frame.width, sair.frame.height);
+    ImageResize(&sair.ImagemOut, sair.frame.width, sair.frame.height);
+    Texture2D sair_texture_out = LoadTextureFromImage(sair.ImagemOut);
+    Texture2D sair_texture_in = LoadTextureFromImage(sair.ImagemIn);
+    
+    Color fundo = {181, 190, 194, 232};
+    
+    bool botao_pressionado, mouse_sobre1, mouse_sobre2;
+    //InitWindow(lar, alt, "Menu Final");
+    while (!WindowShouldClose()){   
+    
+        Vector2 pos_mouse = GetMousePosition();
+        mouse_sobre1 = CheckCollisionPointRec(pos_mouse, recomecar.frame);
+        mouse_sobre2 = CheckCollisionPointRec(pos_mouse, sair.frame);
+        botao_pressionado = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+        
+        BeginDrawing();
+        ClearBackground(fundo);
+            // Titulo
+            
+            DrawRectangleRec(titulo.frame, fundo);
+            DrawText(titulo.string, posX_Ret - 55, 100, 70, BLACK);
+            
+            //-----------------------------------------------------------------------------------------------------------
+            
+            // Recomecar
+            // DrawRectangleRec(recomecar.frame, RED);
+            // DrawRectangleRec(sair.frame, RED);
+            // DrawTexture((mouse_sobre1) ? start_texture_in : start_texture_out, start.frame.x, start.frame.y, WHITE);
+            if (mouse_sobre1)
+            {
+                
+                DrawTexture(recomecar_texture_in, recomecar.frame.x, recomecar.frame.y, WHITE);
+            } else {
+                DrawTexture(recomecar_texture_out, recomecar.frame.x, recomecar.frame.y, WHITE);
+            }
+            
+            if (mouse_sobre1 && botao_pressionado){ // Se o botao "Recomecar" for pressionado...
+                jogo_fase1();
+            }
+            
+            //-----------------------------------------------------------------------------------------------------------
+            
+            //Sair
+            
+            // DrawTexture((mouse_sobre1) ? start_texture_in : start_texture_out, start.frame.x, start.frame.y, WHITE);
+            
+            if (mouse_sobre2)
+            {
+                DrawTexture(sair_texture_in, sair.frame.x, sair.frame.y, WHITE);
+            } else {
+                DrawTexture(sair_texture_out, sair.frame.x, sair.frame.y, WHITE);
+            }
+            // DrawRectangleRec(sair.frame, (mouse_sobre2) ? RED : fundo);
+            // DrawText(sair.string, posX_Ret + 95, 425, 45, (mouse_sobre2) ? WHITE : BLACK); 
+            
+            if(mouse_sobre2 && botao_pressionado){ // Se o botao "Sair" for pressionado...
+                CloseWindow();
+            }
+            EndDrawing();
+    }
+    // UnloadImage(start_image_out);
+    // UnloadImage(start_image_in);
+    // UnloadTexture(start_texture_in);
+    // UnloadTexture(start_texture_out);
+        
+    CloseWindow();
+}
+
 void Manual(){
     botao comecar;
     comecar.frame.height = 160/2;
@@ -74,6 +174,8 @@ void Manual(){
     }
     UnloadTexture(manual_png);
 }
+
+
 
 void Menu_Inicial(){
     // tentar reduzir isso um pouco
@@ -128,7 +230,8 @@ void Menu_Inicial(){
                 UnloadImage(sair.ImagemIn);
                 UnloadTexture(start_texture_in);
                 UnloadTexture(sair_texture_out);
-                 Manual();
+                 //Manual();
+                 MenuFinal();
             }
         } else {
            DrawTexture(start_texture_out, start.frame.x, start.frame.y, WHITE);

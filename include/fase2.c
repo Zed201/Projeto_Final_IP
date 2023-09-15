@@ -223,8 +223,7 @@ void jogo_fase2() {
         }
         if ((persona1.vida/10) <= 0)
         { // colocar telinha de morte
-            ClearBackground(WHITE);
-            CloseWindow();
+            MenuFinal();
         }
 
         // so desenha o inimigo se ele estiver vivo

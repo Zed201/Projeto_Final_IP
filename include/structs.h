@@ -42,4 +42,9 @@ typedef struct{
     float time;
 } Record;
 
+typedef struct{
+    Rectangle frame;
+    char string[100];
+}caixa_texto;
+
 #endif

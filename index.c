@@ -12,6 +12,7 @@
 #include "include/fase1.c"
 #include "include/fase2.c"
 
+
 int main()
 { 
     Menu_Inicial();

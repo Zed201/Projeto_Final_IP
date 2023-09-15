@@ -231,8 +231,7 @@ void jogo_fase1(){
         }
         if ((persona1.vida/10) <= 0)
         {
-            ClearBackground(WHITE);
-            CloseWindow();
+            MenuFinal();
         }
 
         // so desenha o inimigo se ele estiver vivo
