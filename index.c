@@ -14,8 +14,8 @@
 
 
 int main()
-{ 
-    //putName(10);
+{
+    InitAudioDevice();
     Menu_Inicial();
     return 0;
 }

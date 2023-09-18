@@ -18,9 +18,7 @@ void jogo_fase1(){
     ImageResizeNN(&personagem, 86, 97);
     ImageFlipHorizontal(&personagem);
     persona1.textura = LoadTextureFromImage(personagem);
-    // ajustar esse valor onde ele começa, o 414 no caso, quando for trocar de sprite
     persona1.target.x = lar / 2, persona1.target.y = 414;
-    // ajustar a qtd de vida
     persona1.vida = perso_lifes, persona1.dash = true, persona1.Jump = true;
 
     // Inicializacao da espada/arma e flip dela para acertar a posicao
@@ -36,11 +34,10 @@ void jogo_fase1(){
 
     // Parte de audio
     //InitAudioDevice();
-    //Music musica = LoadMusicStream("assets/sounds/music.mp3");
-    // PlayMusicStream(musica);
-    // SetMusicVolume(musica,5);
-    // musica ta muito alta
-    //Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
+    Music musica = LoadMusicStream("assets/sounds/music.mp3");
+    PlayMusicStream(musica);
+    SetMusicVolume(musica,5);
+    Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
 
     // Parte dos inimigos, inicializacao deles
     inimigo inimigos[enemy_qtd];
@@ -85,7 +82,7 @@ void jogo_fase1(){
         double time = GetTime() - tempo1; 
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
-        //UpdateMusicStream(musica);
+        UpdateMusicStream(musica);
 
         // Logica de movimentacao do personagem
         if(persona1.Jump == 1 && space == 0){
@@ -119,7 +116,7 @@ void jogo_fase1(){
         }
         // dash
         if (IsKeyPressed(KEY_D) && persona1.dash == true)
-        { // 70 é um valor arbitrário  que eu coloquei com base no sprite do personagem
+        {
             if (persona1.target.x > border_extender && persona1.target.x + persona1.textura.width < lar - border_extender)
             {
                 persona1.dash = false;
@@ -160,7 +157,7 @@ void jogo_fase1(){
         { 
             persona1.velo = -PJS;
             persona1.Jump = false, hit = false;
-            //PlaySound(jumpS);
+            PlaySound(jumpS);
         }
         if (!hit)
         {
@@ -259,15 +256,14 @@ void jogo_fase1(){
             UnloadTexture(persona1.textura);
             UnloadImage(Espe_im);
             UnloadTexture(Espada.textura);
-            //UnloadMusicStream(musica);
-            //UnloadSound(jumpS);
+            UnloadMusicStream(musica);
+            UnloadSound(jumpS);
             UnloadImage(ponteiros);
             for (int i = 0; i < enemy_qtd; i++)
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            //transicao(1, time);
-           transicao2(tempo1);
+            transicao2(tempo1);
         }
         else
         {

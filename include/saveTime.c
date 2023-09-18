@@ -24,7 +24,7 @@ void viewSaves(){
     voltar.frame.width = 280;
     //dimensoes do botao•
     voltar.frame.x = 225;
-    voltar.frame.y = 400;
+    voltar.frame.y = 440;
 
     voltar.ImagemOut = LoadImage("assets/imgs/sair_out.png");
     voltar.ImagemIn = LoadImage("assets/imgs/sair_in.png");
@@ -32,6 +32,10 @@ void viewSaves(){
     ImageResize(&voltar.ImagemOut, voltar.frame.width, voltar.frame.height);
     Texture2D voltar_texture_out = LoadTextureFromImage(voltar.ImagemOut);
     Texture2D voltar_texture_in = LoadTextureFromImage(voltar.ImagemIn);
+    
+    Image imagem = LoadImage("assets/imgs/tv.png");
+    ImageResizeNN(&imagem, lar, alt);
+    Texture2D textura = LoadTextureFromImage(imagem);
     
     Record *saves=NULL;
     Record *aux=NULL;
@@ -68,8 +72,7 @@ void viewSaves(){
             }
         }
     }
-    InitWindow(lar, alt, "Histórico de Ganhadores");
-    //InitWindow(lar, alt, "Salvando");
+
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -78,7 +81,7 @@ void viewSaves(){
         }
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawRectangle(80, 60, 570, 325, fundo);
+        DrawTexture(textura, 0, 0, WHITE);
         
         //animacao do botao
         Vector2 pos = GetMousePosition();
@@ -87,30 +90,22 @@ void viewSaves(){
             DrawTexture(voltar_texture_in, voltar.frame.x, voltar.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 CloseWindow();
+                //Menu_Inicial();
             }
         } else {
             DrawTexture(voltar_texture_out, voltar.frame.x, voltar.frame.y, WHITE);
         }
-        DrawText(TextFormat("RECORDS"), 310, 60, 20, BLACK);
+        DrawText(TextFormat("RECORDS"), 310, 150, 20, BLACK);
         
         for(i=0; i<qtdSaves; i++){
-            if(i<15){
+            if(i<10){
                 if(i==0){
-                    DrawText(TextFormat("%d. %s", i+1, saves[i].name), 100, 80+20*i, 20, RED);
-                    DrawText(TextFormat("%.3f", saves[i].time), 560, 80+20*i, 20, RED);
+                    DrawText(TextFormat("%d. %s", i+1, saves[i].name), 160, 170+20*i, 20, RED);
+                    DrawText(TextFormat("%.3f", saves[i].time), 510, 170+20*i, 20, RED);
                 }
-                /*
-                else if(i==1){
-                    DrawText(TextFormat("%d. %s", i+1, saves[i].name), 100, 80+20*i, 20, RED);
-                    DrawText(TextFormat("%.3f", saves[i].time), 560, 80+20*i, 20, RED);
-                }
-                else if(i==2){
-                    DrawText(TextFormat("%d. %s", i+1, saves[i].name), 100, 80+20*i, 20, RED);
-                    DrawText(TextFormat("%.3f", saves[i].time), 560, 80+20*i, 20, RED);
-                }*/
                 else{
-                    DrawText(TextFormat("%d. %s", i+1, saves[i].name), 100, 80+20*i, 20, BLACK);
-                    DrawText(TextFormat("%.3f", saves[i].time), 560, 80+20*i, 20, BLACK);
+                    DrawText(TextFormat("%d. %s", i+1, saves[i].name), 160, 170+20*i, 20, BLACK);
+                    DrawText(TextFormat("%.3f", saves[i].time), 510, 170+20*i, 20, BLACK);
                 }
             }
         }
@@ -120,22 +115,22 @@ void viewSaves(){
     UnloadImage(voltar.ImagemIn);
     UnloadTexture(voltar_texture_in);
     UnloadTexture(voltar_texture_out);
-    
+    UnloadImage(imagem);
+    UnloadTexture(textura);
     CloseWindow();
 }
+
 void putName(float time){
-    InitWindow(lar, alt, "Salvando");
     Color fundo;
     fundo.r = 181;
     fundo.g = 190;
     fundo.b = 194;
     fundo.a = 232;
-    //InitWindow(alt, lar, "teste");
     botao hist, sair;
     hist.frame.height = 160/2;
     hist.frame.width = 250;
-    hist.frame.x = 80;
-    hist.frame.y = 400;
+    hist.frame.x = 440;
+    hist.frame.y = 440;
     hist.ImagemOut = LoadImage("assets/imgs/hist_out.png");
     hist.ImagemIn = LoadImage("assets/imgs/hist_in.png");
     ImageResize(&hist.ImagemIn, hist.frame.width, hist.frame.height);
@@ -145,8 +140,8 @@ void putName(float time){
 
     sair.frame.height = 160/2;
     sair.frame.width = 250;
-    sair.frame.x = 430;
-    sair.frame.y = 400;
+    sair.frame.x = 40;
+    sair.frame.y = 440;
     sair.ImagemOut = LoadImage("assets/imgs/sair_out.png");
     sair.ImagemIn = LoadImage("assets/imgs/sair_in.png");
     ImageResize(&sair.ImagemIn, sair.frame.width, sair.frame.height);
@@ -154,21 +149,26 @@ void putName(float time){
     Texture2D sair_texture_out = LoadTextureFromImage(sair.ImagemOut);
     Texture2D sair_texture_in = LoadTextureFromImage(sair.ImagemIn);
 
+    Image imagem = LoadImage("assets/imgs/tv.png");
+    ImageResizeNN(&imagem, lar, alt);
+    Texture2D textura = LoadTextureFromImage(imagem);
+
     Rectangle textBox;
     //dimensoes do botao
     textBox.height = 70;
     textBox.width = 300;
     //coordenadas do botao
     textBox.x = 220;
-    textBox.y = 200;
+    textBox.y = 280;
     
     char *name=NULL;
     char *aux=NULL;
     int tam=0;
     
+    int flag_name=0;
+    
     SetTargetFPS(10);
     int frameCounter=0;
-    //InitWindow(lar, alt, "<Nome>");
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -177,8 +177,9 @@ void putName(float time){
         }
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawRectangle(80, 60, 570, 325, fundo);
-        DrawText(TextFormat("PARABENS!  INSIRA SEU NOME"), 102, 80, 35, BLACK);
+        DrawTexture(textura, 0, 0, WHITE);
+        DrawText(TextFormat("PARABENS!"), 265, 170, 35, BLACK);
+        DrawText(TextFormat("INSIRA SEU NOME"), 210, 220, 35, BLACK);
         
         //animacoes dos "retangulos"
         Vector2 pos = GetMousePosition();
@@ -186,8 +187,13 @@ void putName(float time){
         {
              DrawTexture(hist_texture_in, hist.frame.x, hist.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                save(name, time);
-                viewSaves();
+                if(flag_name==1){
+                     save(name, time);
+                    viewSaves();
+                }
+                else{
+                    DrawText(TextFormat("INSIRA SEU NOME"), 210, 220, 35, RED);
+                }
             }
         } else {
             DrawTexture(hist_texture_out, hist.frame.x, hist.frame.y, WHITE);
@@ -197,8 +203,14 @@ void putName(float time){
         {
              DrawTexture(sair_texture_in, sair.frame.x, sair.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                save(name, time);
-                CloseWindow();
+                if(flag_name==1){
+                    save(name, time);
+                    CloseWindow();
+                    Menu_Inicial();
+                }
+                else{
+                   DrawText(TextFormat("INSIRA SEU NOME"), 210, 220, 35, RED);
+                }
             }
         } else {
             DrawTexture(sair_texture_out, sair.frame.x, sair.frame.y, WHITE);
@@ -217,6 +229,7 @@ void putName(float time){
             while(key > 0){
                 if ((key >= 32) && (key <= 125) && (tam < MAX_LEN))
                 {   
+                    flag_name=1;
                     aux = name;
                     name = (char *) realloc(aux, (tam+1));
                     if(name == NULL){
@@ -253,5 +266,6 @@ void putName(float time){
     UnloadImage(sair.ImagemIn);
     UnloadTexture(hist_texture_in);
     UnloadTexture(sair_texture_out);
-
+    UnloadImage(imagem);
+    UnloadTexture(textura);
 }

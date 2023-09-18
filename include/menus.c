@@ -27,13 +27,12 @@ void transicao2(double tempo1){
             WaitTime(transition_time);
             UnloadTexture(transicao2);
             jogo_fase2(tempo1);
-            //Manual();
         }
         
 }
 
 void MenuFinal(){
-
+    //InitWindow(lar, alt, "Recomeçar");
     caixa_texto titulo;
     titulo.frame.height = 90;
     titulo.frame.width = 450;
@@ -70,7 +69,6 @@ void MenuFinal(){
     Color fundo = {181, 190, 194, 232};
     
     bool botao_pressionado, mouse_sobre1, mouse_sobre2;
-    //InitWindow(lar, alt, "Menu Final");
     while (!WindowShouldClose()){   
     
         Vector2 pos_mouse = GetMousePosition();
@@ -84,13 +82,6 @@ void MenuFinal(){
             
             DrawRectangleRec(titulo.frame, fundo);
             DrawText(titulo.string, posX_Ret - 55, 100, 70, BLACK);
-            
-            //-----------------------------------------------------------------------------------------------------------
-            
-            // Recomecar
-            // DrawRectangleRec(recomecar.frame, RED);
-            // DrawRectangleRec(sair.frame, RED);
-            // DrawTexture((mouse_sobre1) ? start_texture_in : start_texture_out, start.frame.x, start.frame.y, WHITE);
             if (mouse_sobre1)
             {
                 
@@ -100,14 +91,23 @@ void MenuFinal(){
             }
             
             if (mouse_sobre1 && botao_pressionado){ // Se o botao "Recomecar" for pressionado...
-                jogo_fase1();
+                //jogo_fase1();
+                UnloadImage(recomecar.ImagemIn);
+                UnloadImage(recomecar.ImagemOut);
+                UnloadImage(sair.ImagemIn);
+                UnloadImage(sair.ImagemOut);
+                UnloadTexture(sair_texture_in);
+                UnloadTexture(sair_texture_out);
+                UnloadTexture(recomecar_texture_in);
+                UnloadTexture(recomecar_texture_out);
+                Manual();
+                //jogo_fase1();
             }
-            
+
             //-----------------------------------------------------------------------------------------------------------
             
             //Sair
             
-            // DrawTexture((mouse_sobre1) ? start_texture_in : start_texture_out, start.frame.x, start.frame.y, WHITE);
             
             if (mouse_sobre2)
             {
@@ -115,18 +115,12 @@ void MenuFinal(){
             } else {
                 DrawTexture(sair_texture_out, sair.frame.x, sair.frame.y, WHITE);
             }
-            // DrawRectangleRec(sair.frame, (mouse_sobre2) ? RED : fundo);
-            // DrawText(sair.string, posX_Ret + 95, 425, 45, (mouse_sobre2) ? WHITE : BLACK); 
             
             if(mouse_sobre2 && botao_pressionado){ // Se o botao "Sair" for pressionado...
                 CloseWindow();
             }
             EndDrawing();
     }
-    // UnloadImage(start_image_out);
-    // UnloadImage(start_image_in);
-    // UnloadTexture(start_texture_in);
-    // UnloadTexture(start_texture_out);
         
     CloseWindow();
 }
@@ -139,7 +133,6 @@ void tela_creditos(){
     sair.frame.x = 237;
     sair.frame.y = 440;
     
-    //InitWindow(lar, alt, "Joguinho Massa");
     sair.ImagemOut = LoadImage("assets/imgs/sair_out.png");
     sair.ImagemIn = LoadImage("assets/imgs/sair_in.png");
     ImageResize(&sair.ImagemIn, sair.frame.width, sair.frame.height);
@@ -237,7 +230,6 @@ void Manual(){
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 UnloadTexture(manual_png);
                 UnloadTexture(textura);
-                //jogo_fase1();
                 transicao1();
             }
         } else {
@@ -252,7 +244,6 @@ void Manual(){
 
 
 void Menu_Inicial(){
-    // tentar reduzir isso um pouco
     botao start, sair, creditos;
     start.frame.height = 160/2;
     start.frame.width = 250;

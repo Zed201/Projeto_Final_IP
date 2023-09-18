@@ -1,10 +1,6 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-#include "raylib.h"
-// Posicao do botao do menu
-
-
 typedef struct{
     Rectangle target;
     Texture2D textura;

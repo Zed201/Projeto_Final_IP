@@ -4,7 +4,6 @@
 #include "defs.h"
 
 void jogo_fase2(double tempo1) {
-    //InitWindow(lar, alt, "Testando");
     Image fundo = LoadImage("assets/imgs/fundo2.png");
     ImageResizeNN(&fundo, lar, alt);
     Texture2D textura_fundo = LoadTextureFromImage(fundo);
@@ -18,9 +17,7 @@ void jogo_fase2(double tempo1) {
     ImageResizeNN(&personagem, 86, 97);
     ImageFlipHorizontal(&personagem);
     persona1.textura = LoadTextureFromImage(personagem);
-    // ajustar esse valor onde ele começa, o 414 no caso, quando for trocar de sprite
     persona1.target.x = lar / 2, persona1.target.y = 414;
-    // ajustar a qtd de vida
     persona1.vida = perso_lifes, persona1.dash = true, persona1.Jump = true;
 
     // Inicializacao da espada/arma e flip dela para acertar a posicao
@@ -35,7 +32,6 @@ void jogo_fase2(double tempo1) {
     Espada.target.width = Espada.textura.width;
 
     // Parte de audio
-    InitAudioDevice();
     Music musica = LoadMusicStream("assets/sounds/music.mp3");
     PlayMusicStream(musica);
     Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
@@ -67,11 +63,10 @@ void jogo_fase2(double tempo1) {
         Espada.target.x = Espada.posEspada + persona1.target.x;
         Espada.target.y = persona1.target.y + 55;
 
-        // reduz o tempo em 1.5 pois é o tempo da transicao
         double time = GetTime() - transition_time - tempo1;
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
-        //UpdateMusicStream(musica);
+        UpdateMusicStream(musica);
 
         // Logica de movimentacao do personagem
         if(persona1.Jump == 1 && space == 0){
@@ -232,7 +227,6 @@ void jogo_fase2(double tempo1) {
             
             if (inimigos[i].morto == 'N')
             {
-                //DrawRectangleRec(inimigos[i].target, inimigos[i].cor);
                 DrawTexture(inimigos[i].textura, inimigos[i].target.x, inimigos[i].target.y, WHITE);
                 
             }
@@ -250,11 +244,10 @@ void jogo_fase2(double tempo1) {
             UnloadTexture(persona1.textura);
             UnloadImage(Espe_im);
             UnloadTexture(Espada.textura);
-            UnloadMusicStream(musica);
-            //UnloadSound(jumpS);
+            UnloadSound(jumpS);
             UnloadImage(ponteiros);
-            //StopMusicStream(musica);
-            //UnloadMusicStream(musica);
+            StopMusicStream(musica);
+            UnloadMusicStream(musica);
 
             for (int i = 0; i < enemy_qtd; i++)
             {
