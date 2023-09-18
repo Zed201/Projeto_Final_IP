@@ -1,8 +1,8 @@
 #ifndef SAVETIME_H
 #define SAVETIME_H
 
-    void save(char *nome, float time);
+    void save(char *nome, double time);
     void viewSaves();
-    void putName(float time);
+    void putName(double time);
 
 #endif

@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "structs.h"
 #include "defs.h"
+#include <stdio.h>
 
 void jogo_fase2(double tempo1) {
     Image fundo = LoadImage("assets/imgs/fundo2.png");
@@ -163,8 +164,8 @@ void jogo_fase2(double tempo1) {
        
         // Controle do inimigo
         if(inimigos[lol].target.y == floor_y) {
-           lol += 1;
            inimigos[lol].chao = 'S';
+           lol += 1;
         }
         else {
             inimigos[lol].target.y += 23;
@@ -253,6 +254,7 @@ void jogo_fase2(double tempo1) {
             {
                 UnloadTexture(inimigos[i].textura);
             }
+            printf("-%f\n", time);
             putName(time);
         } else {
             qtd_mortos = 0;

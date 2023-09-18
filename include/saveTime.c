@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "defs.h"
 
-void save(char *name, float time){
+void save(char *name, double time){
     //salvar tempo em arquivo txt
     FILE *arq;
     arq = fopen("saves.txt", "a");
@@ -13,7 +13,7 @@ void save(char *name, float time){
         printf("Erro ao abrir arquivo.\n");
         exit(1);
     }
-    fprintf(arq, "%s,%f\n", name, time);
+    fprintf(arq, "%s,%.3f\n", name, time);
     fclose(arq);
 }
 void viewSaves(){
@@ -58,7 +58,8 @@ void viewSaves(){
             free(aux);
             exit(1);
         }
-        fscanf(arq, "%49[^,],%f\n", saves[qtdSaves].name, &saves[qtdSaves].time);
+        fscanf(arq, "%49[^,],%lf\n", saves[qtdSaves].name, &saves[qtdSaves].time);
+        
         qtdSaves++;
     }
     fclose(arq);
@@ -120,7 +121,7 @@ void viewSaves(){
     CloseWindow();
 }
 
-void putName(float time){
+void putName(double time){
     Color fundo;
     fundo.r = 181;
     fundo.g = 190;
@@ -171,10 +172,6 @@ void putName(float time){
     int frameCounter=0;
     while (!WindowShouldClose())
     {
-        if (IsKeyPressed(KEY_O))
-        {
-            CloseWindow();
-        }
         BeginDrawing();
         ClearBackground(WHITE);
         DrawTexture(textura, 0, 0, WHITE);
@@ -188,6 +185,7 @@ void putName(float time){
              DrawTexture(hist_texture_in, hist.frame.x, hist.frame.y, WHITE);
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
                 if(flag_name==1){
+                    printf("-%f\n", time);
                      save(name, time);
                     viewSaves();
                 }

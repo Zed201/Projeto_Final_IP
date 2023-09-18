@@ -35,7 +35,7 @@ typedef struct
 
 typedef struct{
     char name[50];
-    float time;
+    double time;
 } Record;
 
 typedef struct{
