@@ -68,6 +68,7 @@ void jogo_fase1(){
     int space = 0, dash_counter = 0, qtd_mortos = 0;
     char dir = 'D', Espa_Cont = 'C';
     bool hit = true;
+    double tempo1 = GetTime();
     SetTargetFPS(40);
     while (!WindowShouldClose())
     {
@@ -78,8 +79,10 @@ void jogo_fase1(){
         // Atualizacao da colisao da arma
         Espada.target.x = Espada.posEspada + persona1.target.x;
         Espada.target.y = persona1.target.y + 55;
-
-        double time = GetTime();
+        
+        
+      //  double time = GetTime();
+        double time = GetTime() - tempo1; 
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
         //UpdateMusicStream(musica);
@@ -264,7 +267,7 @@ void jogo_fase1(){
                 UnloadTexture(inimigos[i].textura);
             }
             //transicao(1, time);
-           transicao2();
+           transicao2(tempo1);
         }
         else
         {

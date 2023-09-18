@@ -15,6 +15,7 @@
 
 int main()
 { 
+    //putName(10);
     Menu_Inicial();
     return 0;
 }

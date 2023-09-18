@@ -17,7 +17,7 @@ void transicao1(){
         
 }
 
-void transicao2(){
+void transicao2(double tempo1){
         Texture2D transicao2 = LoadTextureFromImage(LoadImage("assets/imgs/fase2-inicio.png"));
         while (!WindowShouldClose())
         {
@@ -26,7 +26,7 @@ void transicao2(){
             EndDrawing();
             WaitTime(transition_time);
             UnloadTexture(transicao2);
-            jogo_fase2();
+            jogo_fase2(tempo1);
             //Manual();
         }
         

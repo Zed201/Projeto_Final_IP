@@ -68,7 +68,8 @@ void viewSaves(){
             }
         }
     }
-
+    InitWindow(lar, alt, "Histórico de Ganhadores");
+    //InitWindow(lar, alt, "Salvando");
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_O))
@@ -123,6 +124,7 @@ void viewSaves(){
     CloseWindow();
 }
 void putName(float time){
+    InitWindow(lar, alt, "Salvando");
     Color fundo;
     fundo.r = 181;
     fundo.g = 190;

@@ -3,7 +3,7 @@
 #include "structs.h"
 #include "defs.h"
 
-void jogo_fase2() {
+void jogo_fase2(double tempo1) {
     //InitWindow(lar, alt, "Testando");
     Image fundo = LoadImage("assets/imgs/fundo2.png");
     ImageResizeNN(&fundo, lar, alt);
@@ -68,7 +68,7 @@ void jogo_fase2() {
         Espada.target.y = persona1.target.y + 55;
 
         // reduz o tempo em 1.5 pois é o tempo da transicao
-        double time = GetTime() - transition_time;
+        double time = GetTime() - transition_time - tempo1;
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
         //UpdateMusicStream(musica);
@@ -222,7 +222,7 @@ void jogo_fase2() {
             DrawRectangle(115, 107, (persona1.vida/10), 17, RED);
         }
         if ((persona1.vida/10) <= 0)
-        { // colocar telinha de morte
+        { 
             MenuFinal();
         }
 
@@ -260,8 +260,7 @@ void jogo_fase2() {
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            CloseWindow();
-
+            putName(time);
         } else {
             qtd_mortos = 0;
         }
