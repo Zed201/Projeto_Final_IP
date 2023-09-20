@@ -7,4 +7,6 @@
     void transicao2(double tempo1);
     void MenuFinal();
     void tela_creditos();
+    void Historia();
+    
 #endif
