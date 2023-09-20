@@ -220,7 +220,7 @@ void Manual(){
         }
         Vector2 pos = GetMousePosition();
         BeginDrawing();
-        //ClearBackground(fundo);
+        
         DrawTexture(textura, 0, 0, WHITE);
         DrawTexture(manual_png, 145, 150, WHITE);
         
@@ -239,6 +239,58 @@ void Manual(){
     }
     UnloadTexture(manual_png);
     UnloadTexture(textura);
+}
+
+void Historia(){
+    botao comecar1;
+    comecar1.frame.height = 160/2;
+    comecar1.frame.width = 255;
+    comecar1.frame.x = 387;
+    comecar1.frame.y = 440;
+
+    comecar1.ImagemOut = LoadImage("assets/imgs/comecar_out.png");
+    comecar1.ImagemIn = LoadImage("assets/imgs/comecar_in.png");
+    ImageResize(&comecar1.ImagemIn, comecar1.frame.width, comecar1.frame.height);
+    ImageResize(&comecar1.ImagemOut, comecar1.frame.width, comecar1.frame.height);
+    Texture2D comecar_texture_out = LoadTextureFromImage(comecar1.ImagemOut);
+    Texture2D comecar_texture_in = LoadTextureFromImage(comecar1.ImagemIn);
+    Color fundo = {181, 190, 194, 232};
+    
+    Image historia_png = LoadImage("assets/imgs/Historia.png");
+    ImageResizeNN(&historia_png, lar, alt);
+    Texture2D textura = LoadTextureFromImage(historia_png);
+
+  //  Texture2D historia_png = LoadTextureFromImage(LoadImage("assets/imgs/historia.png"));
+
+    while (!WindowShouldClose())
+    {
+        if (IsKeyPressed(KEY_O))
+        {
+            CloseWindow();
+        }
+        Vector2 pos = GetMousePosition();
+        BeginDrawing();
+        //ClearBackground(fundo);
+        DrawTexture(textura, 0, 0, WHITE);
+        //DrawTexture(historia_png, 540, 720, WHITE);
+        
+        if (CheckCollisionPointRec(pos, comecar1.frame))
+        {
+            DrawTexture(comecar_texture_in, comecar1.frame.x, comecar1.frame.y, WHITE);
+            if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+              //  UnloadTexture(historia_png);
+                UnloadTexture(textura);
+                UnloadTexture(comecar_texture_out);
+                UnloadTexture(comecar_texture_in);
+                Manual();
+                
+            }
+        } else {
+            DrawTexture(comecar_texture_out, comecar1.frame.x, comecar1.frame.y, WHITE);
+        }
+        EndDrawing();
+    }
+  //  UnloadTexture(historia_png);
 }
 
 
@@ -299,8 +351,6 @@ void Menu_Inicial(){
         Vector2 pos = GetMousePosition();
         BeginDrawing();
         DrawTexture(textura, 0, 0, WHITE);
-        //DrawText("ATAQUE", 300, 200, 35, MAROON);
-        //DrawText("DOS PONTEIROS", 230, 260, 35, MAROON);
         DrawTexture(title1, 300, 210, WHITE);
         DrawTexture(title2, 225, 260, WHITE);
         if (CheckCollisionPointRec(pos, start.frame))
@@ -309,7 +359,21 @@ void Menu_Inicial(){
             
              if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
              {
-                Manual();
+                UnloadImage(imagem);
+                UnloadTexture(textura);
+                UnloadImage(start.ImagemOut);
+                UnloadImage(start.ImagemIn);
+                UnloadTexture(start_texture_in);
+                UnloadTexture(start_texture_out);
+                UnloadImage(sair.ImagemOut);
+                UnloadImage(sair.ImagemIn);
+                UnloadTexture(sair_texture_in);
+                UnloadTexture(sair_texture_out);
+                UnloadImage(creditos.ImagemOut);
+                UnloadImage(creditos.ImagemIn);
+                UnloadTexture(creditos_texture_in);
+                UnloadTexture(creditos_texture_out);
+                Historia();
              }
         } else {
            DrawTexture(start_texture_out, start.frame.x, start.frame.y, WHITE);

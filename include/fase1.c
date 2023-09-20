@@ -4,6 +4,23 @@
 #include "defs.h"
 
 void jogo_fase1(){
+    
+    
+    
+    
+    //------------------------------------------------------
+    Image amc_img = LoadImage("assets/imgs/amc_gif.png");
+    ImageResizeNN(&amc_img, 600, 100);
+    Texture2D amc = LoadTextureFromImage(amc_img);
+    
+    int sprite_w = 100, sprite_h = 100, sprite_index = 0;
+    float frame_s = 0;
+    bool left = true, right = false;
+    //-------------------------------------------------------
+    
+    
+    
+    
     // Inicializacao do fundo
     Image fundo = LoadImage("assets/imgs/fundo2.png");
     ImageResizeNN(&fundo, lar, alt);
@@ -14,17 +31,23 @@ void jogo_fase1(){
     persona1.velo = 0;
     persona1.target.height = 97;
     persona1.target.width = 86;
-    Image personagem = LoadImage("assets/imgs/acm.png");
+    
+    Image personagem = LoadImage("assets/imgs/acm1.png");
+    
+    
+    
     ImageResizeNN(&personagem, 86, 97);
     ImageFlipHorizontal(&personagem);
     persona1.textura = LoadTextureFromImage(personagem);
+    // ajustar esse valor onde ele começa, o 414 no caso, quando for trocar de sprite
     persona1.target.x = lar / 2, persona1.target.y = 414;
+    // ajustar a qtd de vida
     persona1.vida = perso_lifes, persona1.dash = true, persona1.Jump = true;
 
     // Inicializacao da espada/arma e flip dela para acertar a posicao
     arma Espada;
     Espada.posEspada = 0;
-    Image Espe_im = LoadImage("assets/imgs/espada.png");
+    Image Espe_im = LoadImage("assets/imgs/espadinha.png");
     ImageFlipHorizontal(&Espe_im);
     // se ligar que se mudar o tamanho tem que verificar as alteracoes para ficar certinha com o personagem
     ImageResizeNN(&Espe_im, espe_tam, espe_tam);
@@ -36,7 +59,8 @@ void jogo_fase1(){
     //InitAudioDevice();
     Music musica = LoadMusicStream("assets/sounds/music.mp3");
     PlayMusicStream(musica);
-    SetMusicVolume(musica,5);
+    SetMusicVolume(musica, 5);
+    //musica ta muito alta
     Sound jumpS = LoadSoundFromWave(LoadWave("assets/sounds/sound.wav"));
 
     // Parte dos inimigos, inicializacao deles
@@ -69,17 +93,25 @@ void jogo_fase1(){
     SetTargetFPS(40);
     while (!WindowShouldClose())
     {
+        
+        
+        
+        //----------------------
+        frame_s++;
+        //----------------------
+        
+        
+        
+        
         if (IsKeyPressed(KEY_O))
         {
             CloseWindow();
         }
         // Atualizacao da colisao da arma
-        Espada.target.x = Espada.posEspada + persona1.target.x;
-        Espada.target.y = persona1.target.y + 55;
-        
-        
-      //  double time = GetTime();
-        double time = GetTime() - tempo1; 
+        Espada.target.x = espe_pos_x;
+        Espada.target.y = espe_pos_y;
+
+        double time = GetTime() - tempo1;
         float delta = GetFrameTime();
         SetMasterVolume(5.0);
         UpdateMusicStream(musica);
@@ -88,35 +120,81 @@ void jogo_fase1(){
         if(persona1.Jump == 1 && space == 0){
             persona1.Jump = 0;
         }
+        
+        sprite_index = 0;
+        
         // Andar para os lados e flipar o sprite da arma
         if (IsKeyDown(KEY_RIGHT) && persona1.target.x + persona1.textura.width < lar)
         {
+            sprite_index = frame_s;
+            
             persona1.target.x += 5;
+            
+            
             if (dir == 'E')
             {
                 dir = 'D';
+                
                 ImageFlipHorizontal(&personagem);
                 ImageFlipHorizontal(&Espe_im);
                 Espada.textura = LoadTextureFromImage(Espe_im);
                 persona1.textura = LoadTextureFromImage(personagem);
+                
             }
             
+            
+            
+            
+            //----------------------------------
+            if(left == true){
+                sprite_w = sprite_w * -1;
+                right = true;
+                left = false;
+            }
+            //----------------------------------
+            
+            
+            
+            
         }
+        
+        
+        
         if (IsKeyDown(KEY_LEFT) && persona1.target.x > 0)
         {
+            sprite_index = frame_s;
+            
             persona1.target.x -= 5;
+            
+            
+            
             if (dir == 'D')
             {
+                
                 dir = 'E';
                 ImageFlipHorizontal(&personagem);
                 ImageFlipHorizontal(&Espe_im);
                 Espada.textura = LoadTextureFromImage(Espe_im);
                 persona1.textura = LoadTextureFromImage(personagem);
             }
+            
+            
+            
+            
+            //---------------------------
+            if(right == true){
+                sprite_w = sprite_w * -1;
+                left = true;
+                right = false;
+            }
+            //--------------------------
+            
+            
+            
         }
         // dash
         if (IsKeyPressed(KEY_D) && persona1.dash == true)
-        {
+        { // 70 é um valor arbitrário  que eu coloquei com base no sprite do personagem
             if (persona1.target.x > border_extender && persona1.target.x + persona1.textura.width < lar - border_extender)
             {
                 persona1.dash = false;
@@ -157,7 +235,7 @@ void jogo_fase1(){
         { 
             persona1.velo = -PJS;
             persona1.Jump = false, hit = false;
-            PlaySound(jumpS);
+            //PlaySound(jumpS);
         }
         if (!hit)
         {
@@ -210,30 +288,56 @@ void jogo_fase1(){
                 persona1.vida -= 5;
             }
         }
-
+        
+        
         BeginDrawing();
+        
         DrawTexture(textura_fundo, 0, 0, WHITE);
+        
+        
         DrawTexture(persona1.textura, persona1.target.x, persona1.target.y, WHITE);
-        DrawTexture(Espada.textura, Espada.posEspada + persona1.target.x, persona1.target.y + 55, WHITE);
+        
+        
+        
+        //-------------------------------------------
+        //define qual imagem vai escolher
+        
+        int sprite_select = sprite_index * sprite_w;
+        Rectangle source = (Rectangle){sprite_select, 0, sprite_w, sprite_h};
+        
+        //define o onde ela a textura vai ficar
+        DrawTextureRec(amc, source, (Vector2){persona1.target.x, persona1.target.y}, WHITE);
+        //--------------------------------------------
+        
+        
+        
+        
         // barrinha de vida
-        DrawText(TextFormat("Tempo: %.2fs\n", time), 60, 80, 20, RED);
-        DrawText("Vida: ", 60, 105, 20, RED);
+         DrawText(TextFormat("Tempo: %.2fs\n", time), 35, 65, 20, RED);
+        DrawText("Vida: ", 35, 90, 20, RED);
         // Barrinha de vida
         if ((persona1.vida/10) >= 75)
         {
-            DrawRectangle(115, 107, (persona1.vida/10), 17, GREEN);
+            DrawRectangle(92, 93, (persona1.vida/10), 17, GREEN);
         } else if ((persona1.vida/10) < 75 && (persona1.vida/10) >= 40)
         {
-            DrawRectangle(115, 107, (persona1.vida/10), 17, ORANGE);
+            DrawRectangle(92, 93, (persona1.vida/10), 17, ORANGE);
         } else if ((persona1.vida/10) < 40 && (persona1.vida/10) > 0)
         {
-            DrawRectangle(115, 107, (persona1.vida/10), 17, RED);
+            DrawRectangle(92, 93, (persona1.vida/10), 17, RED);
         }
         if ((persona1.vida/10) <= 0)
         {
             MenuFinal();
         }
-
+        if(dir == 'E'){
+            printf("E\n");
+         DrawTexture(Espada.textura, Espada.target.x + 15, Espada.target.y, WHITE);
+       } else if (dir == 'D') {
+        printf("D\n");
+         DrawTexture(Espada.textura, Espada.target.x - 11, Espada.target.y, WHITE);
+       }
+        
         // so desenha o inimigo se ele estiver vivo
         for (int i = 0; i < enemy_qtd; i++)
         {
@@ -256,20 +360,32 @@ void jogo_fase1(){
             UnloadTexture(persona1.textura);
             UnloadImage(Espe_im);
             UnloadTexture(Espada.textura);
-            UnloadMusicStream(musica);
-            UnloadSound(jumpS);
+            //UnloadMusicStream(musica);
+            //UnloadSound(jumpS);
             UnloadImage(ponteiros);
+            
+            
+            
+            
+            //---------------------------
+            UnloadTexture(amc);
+            //---------------------------
+            
+            
+            
+            
             for (int i = 0; i < enemy_qtd; i++)
             {
                 UnloadTexture(inimigos[i].textura);
             }
-            transicao2(tempo1);
+            //transicao(1, time);
+            transicao2(time);
         }
         else
         {
             qtd_mortos = 0;
         }
-
+        
         EndDrawing();
     }
 }

@@ -14,8 +14,8 @@ all: $(Bin).c
 	gcc -w -c ./include/menus.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./Build/libmenus.a
 	gcc -w -c ./include/saveTime.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./Build/libsaveTime.a
 	mkdir -p Build
-	gcc $(Bin).c -L ./Build -lsaveTime -lmenus -lfase2 -lfase1 -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./$(Bin).out
-	./$(Bin).out
+	gcc $(Bin).c -L ./Build -lsaveTime -lmenus -lfase2 -lfase1 -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./$(Bin).o
+	./$(Bin).o
 	clear
 
 # Se nao tiver o executavel ele nao chama a funcao
